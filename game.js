@@ -79,6 +79,9 @@ class Game {
         console.log(`오레노 턴 : Player ${this.currentTurn + 1}`);
     }
 
+    getCurrentPlayer() {
+        return this.palyers[this.currentTurn];
+    }
 }
 
 export default Game;
