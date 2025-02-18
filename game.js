@@ -1,7 +1,7 @@
 import Board from "./board.js";
 import Deck from "./deck.js";
 import Card from "./card.js";
-import { animateShuffle, hideMyHand } from "./animation.js";
+import { animateShuffle, hideMyHand, deckInitSetting, deckDrawSetting } from "./animation.js";
 
 class Game {
     constructor(players) {
@@ -15,9 +15,17 @@ class Game {
     }
 
     start() {
+        // TODO
+        // 스타트 시에 이전의 정보는 다 리셋되어야 할 것 같음
+        // 스타트를 계속하면 더 추가가 됨
+
         console.log("--Game Start--");
+        const board = document.querySelector(".board");
+
         // 덱 셔플
         this.deck.shuffle();
+        deckInitSetting(board);
+
         // 카드 번호 각 플레이어게 할당
         // 플레이어가 각 카드를 배정받는 행위
         animateShuffle();
@@ -25,9 +33,8 @@ class Game {
             const player = this.players[i];
             player.deal(this.cardDeck.card);
         
-            const board = document.querySelector(".board");
             const playerDiv = document.createElement("div");
-        
+            playerDiv.classList.add("div-alignment");
             // 사람별 위치를 다르게 설정
             if (i === 0) {
                 // 첫 번째 사람: 기본 위치 (좌측 중앙)
@@ -77,10 +84,13 @@ class Game {
     nextTurn() {
         this.currentTurn = (this.currentTurn + 1) & this.players.length;
         console.log(`오레노 턴 : Player ${this.currentTurn + 1}`);
+        
+        const drawedDeck = this.deck.draw();
+        deckDrawSetting(drawedDeck, this.deck);
     }
 
     getCurrentPlayer() {
-        return this.palyers[this.currentTurn];
+        return this.players[this.currentTurn];
     }
 }
 

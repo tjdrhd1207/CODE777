@@ -23,3 +23,16 @@ export function hideMyHand(playerDiv) {
         img.classList.add("hide-img");
     });
 }
+
+export function deckInitSetting(board) {
+    const deck = document.createElement("div");
+    deck.classList.add("deck-card");
+    board.appendChild(deck);
+}
+
+export function deckDrawSetting(drawedDeck) {
+    const deck = document.querySelector(".deck-card");
+    deck.innerHTML += drawedDeck.seq;
+    deck.innerHTML += '<br></br>';
+    deck.innerHTML += drawedDeck.question;
+}
