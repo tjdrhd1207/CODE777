@@ -30,7 +30,8 @@ class Deck {
     draw() {
         // 덱을 드로우 함
         // 덱 뭉치에서 하나 꺼냄
-        this.deckCards.pop(); 
+        const deck = this.deckCards.pop();
+        return deck;
     }
 
     question(deckCard) {
@@ -43,6 +44,8 @@ class Deck {
             let j = Math.floor(Math.random() * (i + 1));
             [this.deckCards[i], this.deckCards[j]] = [this.deckCards[j], this.deckCards[i]];
         }
+        console.log(this.deckCards);
+        return this.deckCards;
     }
 
     reShuffle() {
