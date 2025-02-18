@@ -1,0 +1,42 @@
+.card-deck {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;  /* 카드덱의 크기 */
+    height: 150px; /* 카드덱의 크기 */
+    border-radius: 10px;  /* 카드덱의 테두리 */
+    transform: translate(-50%, -50%); /* 정확히 중앙에 배치 */
+    transition: transform 0.3s ease; /* 회전 애니메이션을 부드럽게 */
+    text-align: center;
+    align-content: center;
+}
+
+.card-shuffle {
+    animation: box-deal 2s 3 linear;
+}
+
+.black-background {
+    background-color: black;
+}
+
+.hide-img {
+    visibility: hidden;
+}
+
+
+@keyframes box-deal {
+    0% { transform: translate(-50%, -50%); }
+    
+    10%, 20% { transform: translate(-50%, -250%); } /* 위로 이동 */
+    25% { transform: translate(-50%, -50%); } /* 복귀 */
+    
+    30%, 40% { transform: translate(250%, -50%); } /* 오른쪽 이동 */
+    45% { transform: translate(-50%, -50%); } /* 복귀 */ 
+    
+    50%, 60% { transform: translate(-250%, -50%); } /* 왼쪽 이동 */
+    65% { transform: translate(-50%, -50%); } /* 복귀 */
+
+    70%, 80% { transform: translate(-50%, 250%); } /* 아래쪽 이동 */
+    85% { transform: translate(-50%, -50%); } /* 복귀 */
+}
+
