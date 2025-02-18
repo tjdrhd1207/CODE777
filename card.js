@@ -5,21 +5,21 @@ const BROWN = 'BROWN';
 const RED = 'RED';
 const PINK = 'PINK';
 const BLUE = 'BLUE';
-
+const ASSETS_PATH = '/assets';
 class Card {
     constructor() {
         this.cardInfo = [
-            {value: 1, color: GREEN, src: "/1_green.svg"},
-            {value: 2, color: YELLOW, src: "/2_yellow.svg"},
-            {value: 3, color: BLACK, src: "/3_black.svg"},
-            {value: 4, color: BROWN, src: "/4_brown.svg"},
-            {value: 5, color: RED, src: "/5_red.svg"},
-            {value: 5, color: BLACK, src: "/5_black.svg"},
-            {value: 6, color: PINK, src: "/6_pink.svg"},
-            {value: 6, color: GREEN, src: "/6_green.svg"},
-            {value: 7, color: YELLOW, src: "/7_yellow.svg"},
-            {value: 7, color: PINK, src: "/7_pink.svg"},
-            {value: 7, color: BLUE, src: "/7_blue.svg"},
+            {value: 1, color: GREEN, src: `${ASSETS_PATH}/1_green.svg`},
+            {value: 2, color: YELLOW, src: `${ASSETS_PATH}/2_yellow.svg`},
+            {value: 3, color: BLACK, src: `${ASSETS_PATH}/3_black.svg`},
+            {value: 4, color: BROWN, src: `${ASSETS_PATH}/4_brown.svg`},
+            {value: 5, color: RED, src: `${ASSETS_PATH}/5_red.svg`},
+            {value: 5, color: BLACK, src: `${ASSETS_PATH}/5_black.svg`},
+            {value: 6, color: PINK, src: `${ASSETS_PATH}/6_pink.svg`},
+            {value: 6, color: GREEN, src: `${ASSETS_PATH}/6_green.svg`},
+            {value: 7, color: YELLOW, src: `${ASSETS_PATH}/7_yellow.svg`},
+            {value: 7, color: PINK, src: `${ASSETS_PATH}/7_pink.svg`},
+            {value: 7, color: BLUE, src: `${ASSETS_PATH}/7_blue.svg`},
         ];
 
         this.cardCounts = {
