@@ -5,7 +5,7 @@ const BROWN = 'BROWN';
 const RED = 'RED';
 const PINK = 'PINK';
 const BLUE = 'BLUE';
-const ASSETS_PATH = '/assets';
+const ASSETS_PATH = 'assets';
 class Card {
     constructor() {
         this.cardInfo = [
