@@ -82,11 +82,13 @@ class Game {
     }
 
     nextTurn() {
-        this.currentTurn = (this.currentTurn + 1) & this.players.length;
+        this.currentTurn = (this.currentTurn + 1) % this.players.length;
         console.log(`오레노 턴 : Player ${this.currentTurn + 1}`);
         
         const drawedDeck = this.deck.draw();
         deckDrawSetting(drawedDeck, this.deck);
+
+        this.players[this.currentTurn].answer(drawedDeck.question);
     }
 
     getCurrentPlayer() {

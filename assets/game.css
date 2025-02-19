@@ -47,9 +47,9 @@
 }
 
 .deck-card {
-    transform: translate(550%, 150%);
-    width: 150px;
-    height: 200px;
+    transform: translate(500%, 245%);
+    width: 100px;
+    height: 150px;
     border-radius: 10px;
     background-color: pink;
 }

@@ -15,7 +15,7 @@ class Player {
 
     // 질문에 대답하기
     answer(question) {
-        
+        console.log(question);
     }
 
     // 카드를 나눠받기

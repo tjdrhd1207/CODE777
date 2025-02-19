@@ -32,6 +32,7 @@ export function deckInitSetting(board) {
 
 export function deckDrawSetting(drawedDeck) {
     const deck = document.querySelector(".deck-card");
+    deck.innerHTML = "";
     deck.innerHTML += drawedDeck.seq;
     deck.innerHTML += '<br></br>';
     deck.innerHTML += drawedDeck.question;
