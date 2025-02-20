@@ -34,7 +34,11 @@ class Game {
             player.deal(this.cardDeck.card);
         
             const playerDiv = document.createElement("div");
+            const playerNameTag = document.createElement("div");
+            playerNameTag.innerHTML = player.name;
             playerDiv.classList.add("div-alignment");
+            playerDiv.classList.add(player.name);
+            playerDiv.appendChild(playerNameTag);
             // 사람별 위치를 다르게 설정
             if (i === 0) {
                 // 첫 번째 사람: 기본 위치 (좌측 중앙)
@@ -84,7 +88,8 @@ class Game {
     nextTurn() {
         this.currentTurn = (this.currentTurn + 1) % this.players.length;
         console.log(`오레노 턴 : Player ${this.currentTurn + 1}`);
-        
+        alert(this.players[this.currentTurn].name + "의 턴");
+
         const drawedDeck = this.deck.draw();
         deckDrawSetting(drawedDeck, this.deck);
 
