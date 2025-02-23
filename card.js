@@ -40,6 +40,7 @@ class Card {
 
     }
 
+
     cardSetting() {
         this.cardInfo.forEach((card) => {
             let keyInfo = `${card.value}_${card.color}`;
@@ -59,19 +60,19 @@ class Card {
         }
     }
 
-    dealCards(player) {
-        let playerCard = [];
-
-        for (let i=0; i < 3; i++) {
-            playerCard.push(this.card.pop());
-        }
-        console.log(`${player.name}에게 나눠진 카드 : ${playerCard[0].value}, ${playerCard[1].value}, ${playerCard[2].value}`);
+    dealCards() {
         console.log(this.card);
-
-        const board = document.querySelector('.board');
-        const players = document.querySelectorAll('.player');
-        
+        return this.card;
   
+    }
+
+    getAllCardValues() {
+        const cardSet = new Set();
+        this.cardInfo.forEach((card) => {
+            cardSet.add(card.value);
+        });
+
+        return cardSet;
     }
 }
 

@@ -31,6 +31,8 @@ export function deckInitSetting(board) {
 }
 
 export function deckDrawSetting(drawedDeck) {
+    console.log("뭐가 문제야");
+    console.log(drawedDeck);
     const deck = document.querySelector(".deck-card");
     deck.innerHTML = "";
     deck.innerHTML += drawedDeck.seq;

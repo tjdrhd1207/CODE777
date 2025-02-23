@@ -13,11 +13,6 @@ class Player {
         this.draw = Deck.draw();
     }
 
-    // 질문에 대답하기
-    answer(question) {
-        console.log(question);
-    }
-
     // 카드를 나눠받기
     deal(cardDeck) {
         for (let i=0; i < 3; i++) {
