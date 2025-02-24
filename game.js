@@ -485,7 +485,74 @@ class Game {
 
                 return pedestal;
             }
+            // 갈색과 파랑 중에서 어느 것이 더 많이 보입니까?
+            case 17: {
+                let pedestal = 0;
+                pedestal = this.showMoreColor(BROWN, BLUE,  '갈색', '파랑');
+                return pedestal;
+            }
+            // 빨강과 분홍 중에서 어느 것이 더 많이 보입니까?
+            case 18: {
+                let pedestal = 0;
+                pedestal = this.showMoreColor(RED, PINK,  '빨강', '분홍');
+                return pedestal;
+            }
+            // 녹색과 파랑 중에서 어느 것이 더 많이 보입니까?
+            case 19: {
+                let pedestal = 0;
+                pedestal = this.showMoreColor(GREEN, BLUE,  '녹색', '파랑');
+                return pedestal;
+            }
+            // 노랑과 분홍 중에서 어느 것이 더 많이 보입니까?
+            case 20: {
+                let pedestal = 0;
+                pedestal = this.showMoreColor(YELLOW, PINK,  '노랑', '분홍');
+                return pedestal;
+            }
+            // 검정과 갈색 중에서 어느 것이 더 많이 보입니까?
+            case 21: {
+                let pedestal = 0;
+                pedestal = this.showMoreColor(BLACK, BROWN,  '검정', '갈색');
+                return pedestal;
+            }
+            // 검정과 빨강 중에서 어느 것이 더 많이 보입니까?
+            case 22: {
+                let pedestal = 0;
+                pedestal = this.showMoreColor(BLACK, RED,  '검정', '빨강');
+                return pedestal;
+            }
+            // 녹색과 노랑 중에서 어느 것이 더 많이 보입니까?
+            case 23: {
+                let pedestal = 0;
+                pedestal = this.showMoreColor(GREEN, YELLOW,  '녹색', '노랑');
+                return pedestal;
+            }
         }
+    }
+
+    showMoreColor(color1, color2, color1Name, color2Name) {
+        let color1Count = 0;
+        let color2Count = 0;
+        
+        this.players.forEach((player) => {
+            /* 현재턴이 아닌 사람들 중 */
+            if (player.id !== this.players[this.currentTurn].id) {
+
+                player.hand.forEach((card) => {
+                    if (card.color === color1) {
+                        color1Count += 1;
+                    } else if (card.color === color2) {
+                        color2Count += 1;
+                    }
+                });
+            }
+        })
+        console.log(`${color1} 갯수 : ` + color1Count);
+        console.log(`${color2} 갯수 : ` + color2Count);
+        pedestal = (color1Count > color2Count) ? color1Name : (color1Count === color2Count ? '더 많이 보이지 않습니다.' : color2Name);
+        console.log(pedestal);
+        
+        return pedestal;
     }
     
 }
