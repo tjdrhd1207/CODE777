@@ -26,14 +26,14 @@ export function hideMyHand(playerDiv) {
 
 export function deckInitSetting(board) {
     const deck = document.createElement("div");
-    deck.classList.add("deck-card");
+    deck.classList.add("deck");
     board.appendChild(deck);
 }
 
 export function deckDrawSetting(drawedDeck) {
     console.log("뭐가 문제야");
     console.log(drawedDeck);
-    const deck = document.querySelector(".deck-card");
+    const deck = document.querySelector(".deck");
     deck.innerHTML = "";
     deck.innerHTML += drawedDeck.seq;
     deck.innerHTML += '<br></br>';

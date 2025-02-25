@@ -14,8 +14,11 @@ const game = new Game([player1, player2, player3, player4]);
 
 btn.addEventListener("click", () => {
     const cardDeck = document.querySelector('.card-deck');
-    cardDeck.classList.add('card-shuffle');
-
+    // 임시효과 제거
+    // https://codepen.io/Muskelkraft/pen/oJpMNW
+    // cardDeck.classList.add('card-shuffle');
+    cardDeck.classList.add('is-animated');
+    
     game.start();
 });
 

@@ -1,4 +1,4 @@
-.card-deck {
+.deck-tail {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -9,6 +9,54 @@
     transition: transform 0.3s ease; /* 회전 애니메이션을 부드럽게 */
     text-align: center;
     align-content: center;
+
+    animation: none;
+    animation-fill-mode: forwards;
+}
+
+.deck_tail[data-card="0"] {
+    z-index: 6;
+    margin-top: 0;
+}
+
+.deck_tail[data-card="1"] {
+    z-index: 5;
+    margin-top: 4px;
+}
+
+.deck_tail[data-card="2"] {
+    z-index: 4;
+    margin-top: 8px;
+}
+
+.is-animated .deck-tail[data-card="0"] {
+    animation: shuffle 1s ease-in-out 0s 1 normal;
+    z-index: 2;
+    transition: z-index 0s ease-in-out 0.5s;
+}
+
+.is-animated .deck-tail[data-card="1"] {
+   animation: shuffle 1s ease-in-out 1s 1 normal;
+   z-index: 1;
+   transition: z-index 0s ease-in-out 1.5s;
+}
+ 
+.is-animated .deck-tail[data-card="2"] {
+   animation: shuffle 1s ease-in-out 2s 1 normal;
+   z-index: 0;
+   transition: z-index 0s ease-in-out 2.5s;
+}
+
+@keyframes shuffle {
+    0% {
+        transform: rotate(0) translateX(0) scale(1);
+    }
+    50% {
+        transform: rotate(5deg) translateX(105%) scale(0.96);
+    }
+    100% {
+        transform: rotate(0) translateX(0);
+    }
 }
 
 .card-shuffle {
@@ -46,10 +94,11 @@
     gap: 20px;
 }
 
-.deck-card {
+.deck {
     transform: translate(500%, 245%);
     width: 100px;
     height: 150px;
     border-radius: 10px;
     background-color: pink;
 }
+
