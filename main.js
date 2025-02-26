@@ -1,5 +1,6 @@
 import Player from "./player.js";
 import Game from "./game.js";
+import { animateDeal } from "./animation.js";
 
 const btn = document.querySelector(".shuffle-button");
 const nextTurn = document.querySelector(".next-turn-button");
@@ -13,12 +14,32 @@ const player4 = new Player("호용", 3);
 const game = new Game([player1, player2, player3, player4]);
 
 btn.addEventListener("click", () => {
-    const cardDeck = document.querySelector('.card-deck');
+    const cardDeck = document.querySelectorAll('.deck-tail');
+    console.log(cardDeck);
     // 임시효과 제거
     // https://codepen.io/Muskelkraft/pen/oJpMNW
     // cardDeck.classList.add('card-shuffle');
-    cardDeck.classList.add('is-animated');
     
+    // shuffle 효과
+    for (let i = 0; i < cardDeck.length; i++) {
+        cardDeck[i].classList.add(`is-animated-${i}`);
+    
+        // shuffle 애니메이션이 끝나면 deal 효과 적용
+        cardDeck[i].addEventListener("animationend", function (event) {
+            // 마지막 카드(`is-animated-2` 등)만 `deal` 효과를 적용하도록 설정
+            if (event.animationName === "shuffle" && i === cardDeck.length - 1) {
+                cardDeck[0].classList.add("card-deal");
+            }
+        }, { once: true }); // 이벤트 리스너 한 번만 실행되도록 설정
+
+        // console.log(cardDeck[i]);
+        /* cardDeck[i].addEventListener("animationstart", () => {
+            console.log("애니메이션 시작");
+        }); */
+    }
+    
+    animateDeal();
+   
     game.start();
 });
 

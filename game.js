@@ -1,7 +1,7 @@
 import Board from "./board.js";
 import Deck from "./deck.js";
 import Card from "./card.js";
-import { animateShuffle, hideMyHand, deckInitSetting, deckDrawSetting } from "./animation.js";
+import { animateShuffle, hideMyHand, deckInitSetting, deckDrawSetting, animateDeal } from "./animation.js";
 
 const GREEN = 'GREEN';
 const YELLOW = 'YELLOW';
@@ -30,6 +30,7 @@ class Game {
         console.log("--Game Start--");
         const board = document.querySelector(".board");
 
+        let playerDivs = [];
         // 덱 셔플
         this.deck.shuffle();
         deckInitSetting(board);
@@ -74,21 +75,23 @@ class Game {
                 playerDiv.style.transform = 'translateX(-50%)'; // 수평 중앙 맞추기
             }
 
-        
+            board.appendChild(playerDiv);
+            playerDivs.push(playerDiv);
             // 각 플레이어의 카드를 playerDiv에 추가
-            for (let j = 0; j < player.hand.length; j++) {
+            /* for (let j = 0; j < player.hand.length; j++) {
                 const imgTag = document.createElement("img");
                 imgTag.setAttribute("src", player.hand[j].src);
                 playerDiv.appendChild(imgTag);
                 board.appendChild(playerDiv);
 
-            }
-
-            if (player.id === 3) {
+            } */
+            /* if (player.id === 3) {
                 hideMyHand(playerDiv);
-            }
+            } */
 
         }
+        // animateDeal(this.cardDeck.card, playerDivs);
+
         // 다음턴으로 이동
         this.nextTurn();
     }
@@ -531,6 +534,7 @@ class Game {
     }
 
     showMoreColor(color1, color2, color1Name, color2Name) {
+        let pedestal;
         let color1Count = 0;
         let color2Count = 0;
         

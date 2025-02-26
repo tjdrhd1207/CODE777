@@ -1,5 +1,6 @@
 export function animateShuffle() {
-    const cardDeck = document.querySelector('.card-deck');
+    
+/*     const cardDeck = document.querySelectorAll('.deck-tail');
     
     let rotationAngle = 0;
     const shuffleInterval = setInterval(() => {
@@ -9,7 +10,7 @@ export function animateShuffle() {
         if (rotationAngle >= 360) {
             clearInterval(shuffleInterval);  // 한 바퀴 돌면 애니메이션 종료
         }
-    }, 50);  // 50ms마다 10도씩 회전
+    }, 50);  // 50ms마다 10도씩 회전 */
 
 }
 
@@ -38,4 +39,26 @@ export function deckDrawSetting(drawedDeck) {
     deck.innerHTML += drawedDeck.seq;
     deck.innerHTML += '<br></br>';
     deck.innerHTML += drawedDeck.question;
+}
+
+export function animateDeal() {
+    const directions = ["위", "오른쪽", "왼쪽", "아래"];
+    const startTime = 3800;
+    const shortInterval = 500;
+    const longInterval = 700;
+
+    let delay = startTime;
+
+    for (let i = 0; i < 12; i++) {
+        setTimeout(() => {
+            console.log(directions[i % 4]); // "위 → 오른쪽 → 왼쪽 → 아래" 반복
+        }, delay);
+    
+        // 처음 4장은 0.5초 간격, 이후 0.7초 간격 반복
+        if (i % 4 === 3) {
+            delay += longInterval; // 5번째, 9번째 카드 0.7초 간격
+        } else {
+            delay += shortInterval;
+        }
+    }
 }
