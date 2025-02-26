@@ -38,7 +38,7 @@ btn.addEventListener("click", () => {
         }); */
     }
     
-    animateDeal();
+    // animateDeal();
    
     game.start();
 });
