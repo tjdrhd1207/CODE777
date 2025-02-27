@@ -73,13 +73,13 @@
 @keyframes box-deal {
     0% { transform: translate(-50%, -50%); }
     
-    10%, 20% { transform: translate(-50%, -250%); } /* 위로 이동 */
+    10%, 20% { transform: translate(-250%, -50%); } /* 왼쪽 이동 */
     25% { transform: translate(-50%, -50%); } /* 복귀 */
     
-    30%, 40% { transform: translate(250%, -50%); } /* 오른쪽 이동 */
+    30%, 40% { transform: translate(300%, -50%); } /* 오른쪽 이동 */
     45% { transform: translate(-50%, -50%); } /* 복귀 */ 
     
-    50%, 60% { transform: translate(-250%, -50%); } /* 왼쪽 이동 */
+    50%, 60% { transform: translate(-50%, -300%); } /* 위쪽 이동 */
     65% { transform: translate(-50%, -50%); } /* 복귀 */
 
     70%, 80% { transform: translate(-50%, 250%); } /* 아래쪽 이동 */

@@ -21,6 +21,11 @@ class Player {
         console.log(`${this.name}에게 나눠진 카드 : ${this.hand[0].value}, ${this.hand[1].value}, ${this.hand[2].value}`);
     }
 
+    callAnswer(answer) {
+        
+    }
+
+
 }
 
 export default Player;

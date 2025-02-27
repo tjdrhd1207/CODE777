@@ -1,17 +1,4 @@
 export function animateShuffle() {
-    
-/*     const cardDeck = document.querySelectorAll('.deck-tail');
-    
-    let rotationAngle = 0;
-    const shuffleInterval = setInterval(() => {
-        rotationAngle += 10;  // 회전 각도 증가
-        cardDeck.style.transform = `translate(-50%, -50%) rotate(${rotationAngle}deg)`;  // 회전 애니메이션
-
-        if (rotationAngle >= 360) {
-            clearInterval(shuffleInterval);  // 한 바퀴 돌면 애니메이션 종료
-        }
-    }, 50);  // 50ms마다 10도씩 회전 */
-
 }
 
 export function hideMyHand(playerDiv) {
@@ -32,7 +19,6 @@ export function deckInitSetting(board) {
 }
 
 export function deckDrawSetting(drawedDeck) {
-    console.log("뭐가 문제야");
     console.log(drawedDeck);
     const deck = document.querySelector(".deck");
     deck.innerHTML = "";
@@ -45,13 +31,15 @@ export function animateDeal(card, players, elements) {
     const directions = ["위", "오른쪽", "왼쪽", "아래"];
     const startTime = 3500;
     const shortInterval = 400;
-    const longInterval = 700;
-
+    const longInterval = 830;
+    let playerDiv = null;
     let delay = startTime;
+    const playerDivs = [];
+    const totalCards = players[0].hand.length;
 
     for (let i =0; i< players.length; i++) {
         const board = document.querySelector(".board");
-        const playerDiv = document.createElement("div");
+        playerDiv = document.createElement("div");
         const playerNameTag = document.createElement("div");
         playerNameTag.innerHTML = players[i].name;
         playerDiv.classList.add("div-alignment");
@@ -85,17 +73,19 @@ export function animateDeal(card, players, elements) {
         }
 
         board.appendChild(playerDiv);
+        playerDivs.push(playerDiv); // 플레이어 div 저장
+    }
 
-        for (let j = 0; j < players[i].hand.length; j++) {
+    for (let i = 0; i < totalCards; i++) { 
+        for (let j = 0; j < players.length; j++) {
             setTimeout(() => {
-                console.log(directions[i % 4]); // "위 → 오른쪽 → 왼쪽 → 아래" 반복
                 const imgTag = document.createElement("img");
-                imgTag.setAttribute("src", players[i].hand[j].src);
-                playerDiv.appendChild(imgTag);
+                imgTag.setAttribute("src", players[j].hand[i].src);
+                playerDivs[j].appendChild(imgTag);
             }, delay);
         
             // 처음 4장은 0.5초 간격, 이후 0.7초 간격 반복
-            if (i % 4 === 3) {
+            if (j % 4 === 3) {
                 delay += longInterval; // 5번째, 9번째 카드 0.7초 간격
             } else {
                 delay += shortInterval;

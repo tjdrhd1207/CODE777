@@ -59,16 +59,27 @@ class Game {
         const drawedDeck = this.deck.draw();
         deckDrawSetting(drawedDeck, this.deck);
 
-        this.answer(drawedDeck);
+        this.answer = this.correctAnswer(drawedDeck);
     }
 
     getCurrentPlayer() {
         return this.players[this.currentTurn];
     }
 
+    submitAnswer(player, answer) {
+        console.log(this.question);
+        console.log(this.answer);
+        if (answer == this.answer) {
+            alert('정답입니다.');
+        } else {
+            // TODO: 카드패 바꿔야함
+        }
+
+    }
+
     // 질문에 대답하기
-    answer(question) {
-        console.log(question);
+    correctAnswer(question) {
+        this.question = question;
         switch (question.seq) {
             // 숫자의 합이 18 이상인 선반은 몇 개입니까?
             case 1: {
@@ -77,6 +88,7 @@ class Game {
                     /* 현재턴이 아닌 사람들 중 */
                     if (player.id !== this.players[this.currentTurn].id) {
                         const handSum = player.hand.reduce((acc, val) => acc + val, 0);
+                        console.log(handSum);
                         if (handSum >= 18) {
                             pedestal += 1;
                         }
@@ -142,9 +154,9 @@ class Game {
                             }
                             valueMap.get(card.color).add(card.value);
                         });
-
+                            console.log(valueMap);
                         // 세개의 색이 다다른 핸드 확인
-                        if (valueMap.size < 3) {
+                        if (valueMap.size === 3) {
                             pedestal +=1;
                         }
                     }
@@ -245,8 +257,6 @@ class Game {
                                 valueMap.set(card.color, 0);
                             }
                         });
-
-                        console.log(valueMap.size);
                         pedestal = valueMap.size;
                     }
                 })
@@ -331,11 +341,7 @@ class Game {
                         });
                     }
                 })
-                console.log("3 갯수 : " + three);
-                console.log("분홍 6 갯수 : " + pinkSix);
                 pedestal = (three > pinkSix) ? '3' : (three === pinkSix ? '더 많이 보이지 않습니다.' : '분홍 6');
-                console.log(pedestal);
-
                 return pedestal;
             }
             // 녹색 6과 노랑 7 중에서 어느 것이 더 많이 보입니까?
@@ -356,12 +362,8 @@ class Game {
                             }
                         });
                     }
-                })
-                console.log("녹색 6 갯수 : " + greenSix);
-                console.log("노랑 7 갯수 : " + yellowSeven);
+                });
                 pedestal = (greenSix > yellowSeven) ? '녹색 6' : (greenSix === yellowSeven ? '더 많이 보이지 않습니다.' : '노랑 7');
-                console.log(pedestal);
-
                 return pedestal;
             }
             // 노랑 2와 노랑 7 중에서 어느 것이 더 많이 보입니까?
@@ -383,11 +385,7 @@ class Game {
                         });
                     }
                 })
-                console.log("노랑 2 갯수 : " + yellowTwo);
-                console.log("노랑 7 갯수 : " + yellowSeven);
                 pedestal = (yellowTwo > yellowSeven) ? '노랑 2' : (yellowTwo === yellowSeven ? '더 많이 보이지 않습니다.' : '노랑 7');
-                console.log(pedestal);
-
                 return pedestal;
             }
             // 분홍 6와 노랑 6 중에서 어느 것이 더 많이 보입니까?
@@ -409,11 +407,7 @@ class Game {
                         });
                     }
                 })
-                console.log("분홍 6 갯수 : " + pinkSix);
-                console.log("노랑 6 갯수 : " + yellowSix);
                 pedestal = (pinkSix > yellowSix) ? '분홍 6' : (pinkSix === yellowSix ? '더 많이 보이지 않습니다.' : '노랑 6');
-                console.log(pedestal);
-
                 return pedestal;
             }
             // 파랑 7과 다른 색깔 7 중에서 어느 것이 더 많이 보입니까?
@@ -435,11 +429,7 @@ class Game {
                         });
                     }
                 })
-                console.log("파랑 7 갯수 : " + blueSeven);
-                console.log("다른 7 갯수 : " + anotherSeven);
                 pedestal = (blueSeven > anotherSeven) ? '파랑 7' : (blueSeven === anotherSeven ? '더 많이 보이지 않습니다.' : '다른 7');
-                console.log(pedestal);
-
                 return pedestal;
             }
             // 갈색과 파랑 중에서 어느 것이 더 많이 보입니까?
@@ -505,10 +495,7 @@ class Game {
                 });
             }
         })
-        console.log(`${color1} 갯수 : ` + color1Count);
-        console.log(`${color2} 갯수 : ` + color2Count);
         pedestal = (color1Count > color2Count) ? color1Name : (color1Count === color2Count ? '더 많이 보이지 않습니다.' : color2Name);
-        console.log(pedestal);
         
         return pedestal;
     }
