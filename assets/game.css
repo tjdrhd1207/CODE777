@@ -13,37 +13,139 @@
 }
 
 .is-animated-0 {
-    z-index: 6;
+    z-index: 12;
     margin-top: 0;
 }
 
 .is-animated-1 {
-    z-index: 5;
+    z-index: 11;
+    margin-top: 1px;
+}
+
+.is-animated-2 {
+    z-index: 10;
+    margin-top: 2px;
+}
+
+.is-animated-3 {
+    z-index: 9;
+    margin-top: 3px;
+}
+
+.is-animated-4 {
+    z-index: 8;
     margin-top: 4px;
 }
 
-.is-animated-2  {
+.is-animated-5 {
+    z-index: 7;
+    margin-top: 5px;
+}
+
+.is-animated-6 {
+    z-index: 6;
+    margin-top: 6px;
+}
+
+.is-animated-7 {
+    z-index: 5;
+    margin-top: 7px;
+}
+
+.is-animated-8 {
     z-index: 4;
     margin-top: 8px;
 }
 
+.is-animated-9 {
+    z-index: 3;
+    margin-top: 9px;
+}
+
+.is-animated-10 {
+    z-index: 2;
+    margin-top: 10px;
+}
+
+.is-animated-11 {
+    z-index: 1;
+    margin-top: 11px;
+}
+
+
+
 .is-animated-0{
     animation: shuffle 1s ease-in-out 0s 1 normal;
-    z-index: 2;
+    z-index: 11;
     transition: z-index 0s ease-in-out 0.5s;
 }
 
 .is-animated-1 {
-   animation: shuffle 1s ease-in-out 1s 1 normal;
-   z-index: 1;
-   transition: z-index 0s ease-in-out 1.5s;
+   animation: shuffle 1s ease-in-out 0s 1 normal;
+   z-index: 10;
+   transition: z-index 0s ease-in-out 0.5s;
 }
  
 .is-animated-2 {
-   animation: shuffle 1s ease-in-out 2s 1 normal;
-   z-index: 0;
-   transition: z-index 0s ease-in-out 2.5s;
+   animation: shuffle 1s ease-in-out 0s 1 normal;
+   z-index: 9;
+   transition: z-index 0s ease-in-out 0.5s;
 }
+
+.is-animated-3 {
+    animation: shuffle 1s ease-in-out 1s 1 normal;
+    z-index: 8;
+    transition: z-index 0s ease-in-out 1.5s;
+ }
+
+ .is-animated-4 {
+    animation: shuffle 1s ease-in-out 1s 1 normal;
+    z-index: 7;
+    transition: z-index 0s ease-in-out 1.5s;
+ }
+
+ .is-animated-5 {
+    animation: shuffle 1s ease-in-out 1s 1 normal;
+    z-index: 6;
+    transition: z-index 0s ease-in-out 1.5s;
+ }
+
+ .is-animated-6 {
+    animation: shuffle 1s ease-in-out 2s 1 normal;
+    z-index: 5;
+    transition: z-index 0s ease-in-out 2.5s;
+ }
+
+ .is-animated-7 {
+    animation: shuffle 1s ease-in-out 2s 1 normal;
+    z-index: 4;
+    transition: z-index 0s ease-in-out 2.5s;
+ }
+
+ .is-animated-8 {
+    animation: shuffle 1s ease-in-out 2s 1 normal;
+    z-index: 3;
+    transition: z-index 0s ease-in-out 2.5s;
+ }
+
+ .is-animated-9 {
+    animation: shuffle 1s ease-in-out 3s 1 normal;
+    z-index: 2;
+    transition: z-index 0s ease-in-out 2.5s;
+ }
+
+ .is-animated-10 {
+    animation: shuffle 1s ease-in-out 3s 1 normal;
+    z-index: 1;
+    transition: z-index 0s ease-in-out 2.5s;
+ }
+
+ .is-animated-11 {
+    animation: shuffle 1s ease-in-out 3s 1 normal;
+    z-index: 0;
+    transition: z-index 0s ease-in-out 2.5s;
+ }
+
 
 @keyframes shuffle {
     0% {
@@ -67,6 +169,26 @@
 
 .hide-img {
     visibility: hidden;
+}
+
+.left-card-deal-0-0 {
+    animation: left-card-deal 2s 1 linear;
+}
+
+.left-card-deal-1-0 {
+    animation: left-card-deal 3s 1 linear;
+}
+
+.left-card-deal-2-0 {
+    animation: left-card-deal 4s 1 linear;
+}
+
+@keyframes left-card-deal {
+    0% { transform: translate(-50%, -50%); }
+
+    30% { transform: translate(-250%, -50%); }
+
+    50% { transform: translate(-50%, -50%); }
 }
 
 

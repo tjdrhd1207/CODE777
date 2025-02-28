@@ -1,7 +1,7 @@
 import Board from "./board.js";
 import Deck from "./deck.js";
 import Card from "./card.js";
-import { animateShuffle, hideMyHand, deckInitSetting, deckDrawSetting, animateDeal } from "./animation.js";
+import { animateShuffle, hintDeckDrawSetting, hideMyHand, hintDeckInitSetting, animateDeal } from "./animation.js";
 
 const GREEN = 'GREEN';
 const YELLOW = 'YELLOW';
@@ -31,23 +31,25 @@ class Game {
         const board = document.querySelector(".board");
 
         let playerDivs = [];
-        // 덱 셔플
+        hintDeckInitSetting(board);
+
+        // 알고리즘 덱 셔플
         this.deck.shuffle();
-        deckInitSetting(board);
+        // 애니메이션 덱 셔플
+        animateShuffle().then(() => {
+            for (let i = 0; i < this.players.length; i++) {
+                const player = this.players[i];
+                player.deal(this.cardDeck.card);
+            }
+            console.log(this.cardDeck.card);
+            animateDeal(this.cardDeck.card, this.players, playerDivs);
+    
+            // 다음턴으로 이동
+            this.nextTurn();
+    
+        });
 
-        // 카드 번호 각 플레이어게 할당
-        // 플레이어가 각 카드를 배정받는 행위
-        animateShuffle();
-        for (let i = 0; i < this.players.length; i++) {
-            const player = this.players[i];
-            player.deal(this.cardDeck.card);
-
-        }
-        console.log(this.cardDeck.card);
-        animateDeal(this.cardDeck.card, this.players, playerDivs);
-
-        // 다음턴으로 이동
-        this.nextTurn();
+        // 플레이어별 카드 나눠받기
     }
 
     nextTurn() {
@@ -57,7 +59,7 @@ class Game {
         alert(this.players[this.currentTurn].name + "의 턴");
 
         const drawedDeck = this.deck.draw();
-        deckDrawSetting(drawedDeck, this.deck);
+        hintDeckDrawSetting(drawedDeck, this.deck);
 
         this.answer = this.correctAnswer(drawedDeck);
     }

@@ -1,4 +1,25 @@
 export function animateShuffle() {
+    return new Promise((resolve) => {
+        const cardDeck = document.querySelectorAll('.deck-tail');
+        let animationCompleted = 0;
+        for (let i =0; i < cardDeck.length; i++) {
+            cardDeck[i].classList.add(`is-animated-${i}`);
+        
+            // 애니메이션 종료 시 이벤트 리스너 등록
+            cardDeck[i].addEventListener("animationend", (event) => {
+                console.log(event.animationName);
+                if (event.animationName === "shuffle") {
+                    animationCompleted++;
+                    console.log(animationCompleted);
+                    console.log(cardDeck.length);
+                    if (animationCompleted === cardDeck.length) {
+                        console.log("애니메이션 완료");
+                        resolve();
+                    }
+                }
+            }, { once: true });
+        }
+    });
 }
 
 export function hideMyHand(playerDiv) {
@@ -12,13 +33,13 @@ export function hideMyHand(playerDiv) {
     });
 }
 
-export function deckInitSetting(board) {
+export function hintDeckInitSetting(board) {
     const deck = document.createElement("div");
     deck.classList.add("deck");
     board.appendChild(deck);
 }
 
-export function deckDrawSetting(drawedDeck) {
+export function hintDeckDrawSetting(drawedDeck) {
     console.log(drawedDeck);
     const deck = document.querySelector(".deck");
     deck.innerHTML = "";
@@ -28,6 +49,7 @@ export function deckDrawSetting(drawedDeck) {
 }
 
 export function animateDeal(card, players, elements) {
+    console.log('실행');
     const directions = ["위", "오른쪽", "왼쪽", "아래"];
     const startTime = 3500;
     const shortInterval = 400;
@@ -76,23 +98,40 @@ export function animateDeal(card, players, elements) {
         playerDivs.push(playerDiv); // 플레이어 div 저장
     }
 
+    const deckTail = document.querySelectorAll(".deck-tail");
+    console.log(deckTail);
+    let count = 0;
     for (let i = 0; i < totalCards; i++) { 
         for (let j = 0; j < players.length; j++) {
-            setTimeout(() => {
                 const imgTag = document.createElement("img");
                 imgTag.setAttribute("src", players[j].hand[i].src);
+                console.log('ㅇㅇㅇ');
+                // 순차적 애니메이션 구현이 필요함
+                if (j == 0) {
+                        console.log(`left-card-deal-${i}-${j}`);
+                        deckTail[count].classList.add(`left-card-deal-${i}-${j}`);
+                }
+                count++;
                 playerDivs[j].appendChild(imgTag);
-            }, delay);
-        
-            // 처음 4장은 0.5초 간격, 이후 0.7초 간격 반복
-            if (j % 4 === 3) {
-                delay += longInterval; // 5번째, 9번째 카드 0.7초 간격
-            } else {
-                delay += shortInterval;
-            }
+        }
+    }    
+}
+
+function animateLeftCardDeal(element) {
+    let start = performance.now(); // 시작 시간
+    const duration = 500; // 애니메이션 지속 시간 (500ms)
+    const startX = 0; // 시작 위치
+    const endX = 100; // 최종 위치 (예제: 100px 이동)
+
+    function step(timestamp) {
+        let progress = (timestamp - start) / duration;
+        if (progress > 1) progress = 1; // 100% 이상 진행되지 않도록 제한
+        element.style.transform = `translateX(${startX + (endX - startX) * progress}px)`;
+
+        if (progress < 1) {
+            requestAnimationFrame(step); // 다음 프레임 호출
         }
     }
 
-    
-    
+    requestAnimationFrame(step);
 }
