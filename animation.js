@@ -7,11 +7,8 @@ export function animateShuffle() {
         
             // 애니메이션 종료 시 이벤트 리스너 등록
             cardDeck[i].addEventListener("animationend", (event) => {
-                console.log(event.animationName);
                 if (event.animationName === "shuffle") {
                     animationCompleted++;
-                    console.log(animationCompleted);
-                    console.log(cardDeck.length);
                     if (animationCompleted === cardDeck.length) {
                         console.log("애니메이션 완료");
                         resolve();
@@ -63,58 +60,96 @@ export function animateDeal(card, players, elements) {
         const board = document.querySelector(".board");
         playerDiv = document.createElement("div");
         const playerNameTag = document.createElement("div");
+        const cardContainer = document.createElement("div");
+        cardContainer.classList.add("card-container");
+
         playerNameTag.innerHTML = players[i].name;
         playerDiv.classList.add("div-alignment");
         playerDiv.classList.add(players[i].name);
+        playerNameTag.classList.add('name-font');
         playerDiv.appendChild(playerNameTag);
+        playerDiv.appendChild(cardContainer);
 
-        if (i === 0) {
-            // 첫 번째 사람: 기본 위치 (좌측 중앙)
-            playerDiv.style.position = 'absolute';
-            playerDiv.style.top = '50%';
-            playerDiv.style.left = '0';
-            playerDiv.style.transform = 'translateY(-50%)'; // 수직 중앙 맞추기
-        } else if (i === 1) {
-            // 두 번째 사람: 오른쪽
-            playerDiv.style.position = 'absolute';
-            playerDiv.style.top = '50%';
-            playerDiv.style.right = '0';
-            playerDiv.style.transform = 'translateY(-50%)'; // 수직 중앙 맞추기
-        } else if (i === 2) {
-            // 세 번째 사람: 위쪽
-            playerDiv.style.position = 'absolute';
-            playerDiv.style.left = '50%';
-            playerDiv.style.top = '0';
-            playerDiv.style.transform = 'translateX(-50%)'; // 수평 중앙 맞추기
-        } else if (i === 3) {
-            // 네 번째 사람: 아래쪽
-            playerDiv.style.position = 'absolute';
-            playerDiv.style.left = '50%';
-            playerDiv.style.bottom = '0';
-            playerDiv.style.transform = 'translateX(-50%)'; // 수평 중앙 맞추기
-        }
+        setPlayerPosition(i, playerDiv);
 
         board.appendChild(playerDiv);
         playerDivs.push(playerDiv); // 플레이어 div 저장
     }
 
     const deckTail = document.querySelectorAll(".deck-tail");
-    console.log(deckTail);
     let count = 0;
-    for (let i = 0; i < totalCards; i++) { 
+
+    for (let i = 0; i < totalCards; i++) {
         for (let j = 0; j < players.length; j++) {
-                const imgTag = document.createElement("img");
-                imgTag.setAttribute("src", players[j].hand[i].src);
-                console.log('ㅇㅇㅇ');
-                // 순차적 애니메이션 구현이 필요함
-                if (j == 0) {
-                        console.log(`left-card-deal-${i}-${j}`);
-                        deckTail[count].classList.add(`left-card-deal-${i}-${j}`);
+            const imgTag = document.createElement("img");
+            imgTag.setAttribute("src", players[j].hand[i].src);
+
+            setTimeout(() => {
+                const animationClass = getAnimationClass(j, i);
+    
+                if (!deckTail[count]) {
+                    console.error(`Error: deckTail[${count}] is undefined!`);
+                    return;
                 }
-                count++;
-                playerDivs[j].appendChild(imgTag);
+    
+                deckTail[count].classList.add(animationClass);
+    
+                let currentCount = count; // 현재 count 값을 저장 (이벤트 핸들러에서 올바른 값을 참조하도록)
+                count++; // **여기서 증가시켜야 모든 카드가 고유한 deckTail[count]를 참조함!**
+    
+                deckTail[currentCount].addEventListener("animationend", function onAnimationEnd() {
+                    deckTail[currentCount].removeEventListener("animationend", onAnimationEnd);
+                    const cardContainer = playerDivs[j].querySelector(".card-container");
+                    cardContainer.appendChild(imgTag);
+                });
+    
+            }, (i * players.length + j) * delay);
         }
-    }    
+    }
+}
+
+// 플레이어별 애니메이션 클래스 반환
+function getAnimationClass(playerIndex, cardIndex) {
+    switch (playerIndex) {
+        case 0: return `left-card-deal-${cardIndex}-${playerIndex}`;
+        case 1: return `right-card-deal-${cardIndex}-${playerIndex}`;
+        case 2: return `top-card-deal-${cardIndex}-${playerIndex}`;
+        case 3: return `bottom-card-deal-${cardIndex}-${playerIndex}`;
+        default: return "";
+    }
+}
+
+function setPlayerPosition(playerId, element) {
+    switch (playerId) {
+        case 0 : {
+            element.style.position = 'absolute';
+            element.style.top = '50%';
+            element.style.left = '0';
+            element.style.transform = 'translateY(-50%)'; // 수직 중앙 맞추기
+            return;
+        }
+        case 1 : {
+            element.style.position = 'absolute';
+            element.style.top = '50%';
+            element.style.right = '0';
+            element.style.transform = 'translateY(-50%)'; // 수직 중앙 맞추기
+            return;
+        }
+        case 2 : {
+            element.style.position = 'absolute';
+            element.style.left = '50%';
+            element.style.top = '0';
+            element.style.transform = 'translateX(-50%)'; // 수평 중앙 맞추기
+            return;
+        }
+        case 3 : {
+            element.style.position = 'absolute';
+            element.style.left = '50%';
+            element.style.bottom = '0';
+            element.style.transform = 'translateX(-50%)'; // 수평 중앙 맞추기
+            return;
+        }
+    }
 }
 
 function animateLeftCardDeal(element) {

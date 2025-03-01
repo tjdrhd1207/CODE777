@@ -19,7 +19,6 @@ class Game {
         this.deck = new Deck();
         this.cardDeck = new Card();
         this.cardDeck.cardSetting();
-
     }
 
     start() {
@@ -29,9 +28,11 @@ class Game {
 
         console.log("--Game Start--");
         const board = document.querySelector(".board");
-
+        const boardCenter = document.querySelector(".board-center");
+        console.log(boardCenter);
         let playerDivs = [];
-        hintDeckInitSetting(board);
+        hintDeckInitSetting(boardCenter);
+        this.previousTurn = this.currentTurn;
 
         // 알고리즘 덱 셔플
         this.deck.shuffle();
@@ -53,10 +54,24 @@ class Game {
     }
 
     nextTurn() {
+        const previousNameTag = document.querySelector(`.${this.players[this.previousTurn].name}`);
+        const previousImgTag = previousNameTag.querySelector(".hand");
+        if (previousImgTag) {
+            previousNameTag.removeChild(previousImgTag);
+        }
+
         this.currentTurn = (this.currentTurn + 1) % this.players.length;
+        this.previousTurn = this.currentTurn;
+
+        const nameTag = document.querySelector(`.${this.players[this.currentTurn].name}`);
+        const turnImg = document.createElement("img");
+
+        turnImg.classList.add("hand");
+        turnImg.setAttribute("src", 'assets/hand-icon2.png');
+        nameTag.appendChild(turnImg);
+
         console.log(`오레노 턴 : Player ${this.currentTurn + 1}`);
         console.log(this.getCurrentPlayer().name);
-        alert(this.players[this.currentTurn].name + "의 턴");
 
         const drawedDeck = this.deck.draw();
         hintDeckDrawSetting(drawedDeck, this.deck);
