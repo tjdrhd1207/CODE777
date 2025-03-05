@@ -117,10 +117,14 @@ class Game {
             case 2: {
                 let pedestal = 0;
                 this.players.forEach((player) => {
+                    let sum = 0;
                     /* 현재턴이 아닌 사람들 중 */
                     if (player.id !== this.players[this.currentTurn].id) {
-                        const handSum = player.hand.reduce((acc, val) => acc + val, 0);
-                        if (handSum <= 12) {
+                        player.hand.forEach((card) => {
+                            sum += card.value;
+                        });
+                        console.log(sum);
+                        if (sum <= 12) {
                             pedestal += 1;
                         }
                     }
