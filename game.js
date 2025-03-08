@@ -1,7 +1,8 @@
 import Board from "./board.js";
 import Deck from "./deck.js";
 import Card from "./card.js";
-import { animateShuffle, hintDeckDrawSetting, hideMyHand, hintDeckInitSetting, animateDeal } from "./animation.js";
+import { arrayHasElement } from "./utils.js";
+import { animateShuffle, hintDeckDrawSetting, hideMyHand, hintDeckInitSetting, animateDeal, deckAnswerSetting } from "./animation.js";
 
 const GREEN = 'GREEN';
 const YELLOW = 'YELLOW';
@@ -29,7 +30,6 @@ class Game {
         console.log("--Game Start--");
         const board = document.querySelector(".board");
         const boardCenter = document.querySelector(".board-center");
-        console.log(boardCenter);
         let playerDivs = [];
         hintDeckInitSetting(boardCenter);
         this.previousTurn = this.currentTurn;
@@ -77,6 +77,7 @@ class Game {
         hintDeckDrawSetting(drawedDeck, this.deck);
 
         this.answer = this.correctAnswer(drawedDeck);
+        deckAnswerSetting(this.answer);
     }
 
     getCurrentPlayer() {
@@ -84,13 +85,14 @@ class Game {
     }
 
     submitAnswer(player, answer) {
-        console.log(this.question);
-        console.log(this.answer);
-        if (answer == this.answer) {
-            alert('정답입니다.');
-        } else {
-            // TODO: 카드패 바꿔야함
-        }
+        let playerHasAnswer = [];
+        player.hand.forEach((hand) => {
+            playerHasAnswer.push(hand.value);
+        });
+
+        let answerYN = arrayHasElement(answer, playerHasAnswer);
+        console.log(answerYN);
+
 
     }
 
@@ -251,10 +253,11 @@ class Game {
                         // 정렬한 핸드를 통해 연속된 숫자인지 확인
                         for (let i = 1; i < sortedCards.length; i++) {
                             if (sortedCards[i].value !== sortedCards[i - 1].value + 1) {
-                                continuous = false;
+                                return;
+                            } else {
+                                continuous = true; // 모두 연속됨
                             }
                         }
-                        continuous = true; // 모두 연속됨
 
                         if (continuous) {
                             pedestal += 1;

@@ -32,15 +32,20 @@ export function hideMyHand(playerDiv) {
 
 export function hintDeckInitSetting(board) {
     const deck = document.createElement("div");
+    const deckAnswer = document.createElement("div");
+
     deck.classList.add("deck");
+    deckAnswer.classList.add("answer");
+
     board.appendChild(deck);
+    board.appendChild(deckAnswer);
 }
 
 export function hintDeckDrawSetting(drawedDeck) {
     console.log(drawedDeck);
     const deck = document.querySelector(".deck");
     deck.innerHTML = "";
-    deck.innerHTML += drawedDeck.seq;
+    deck.innerHTML += `<span style="font-size: 1.5rem; font-weight: bold">${drawedDeck.seq}</span>`;
     deck.innerHTML += '<br></br>';
     deck.innerHTML += drawedDeck.question;
 }
@@ -152,21 +157,66 @@ function setPlayerPosition(playerId, element) {
     }
 }
 
-function animateLeftCardDeal(element) {
-    let start = performance.now(); // 시작 시간
-    const duration = 500; // 애니메이션 지속 시간 (500ms)
-    const startX = 0; // 시작 위치
-    const endX = 100; // 최종 위치 (예제: 100px 이동)
-
-    function step(timestamp) {
-        let progress = (timestamp - start) / duration;
-        if (progress > 1) progress = 1; // 100% 이상 진행되지 않도록 제한
-        element.style.transform = `translateX(${startX + (endX - startX) * progress}px)`;
-
-        if (progress < 1) {
-            requestAnimationFrame(step); // 다음 프레임 호출
-        }
+export function deckAnswerSetting(answer) {
+    const deckAnswerDiv = document.querySelector(".answer");
+    while (deckAnswerDiv.firstChild) {
+        deckAnswerDiv.removeChild(deckAnswerDiv.firstChild);
     }
+    const answerTag = document.createElement("span");
+    answerTag.classList.add("deck-answer");
+    answerTag.innerHTML = "";
+    answerTag.innerHTML += answer;
+    deckAnswerDiv.appendChild(answerTag);
+}
 
-    requestAnimationFrame(step);
+export function showAnswerNumberField(clickedInput, callback) {
+    console.log(clickedInput);
+    const submitAnswer = clickedInput.querySelector(".answer-button-container");
+    console.log(submitAnswer);
+    submitAnswer.classList.add("answer-button-show");
+    submitAnswer.style.display = "flex";
+    const numberButtons = submitAnswer.children;
+    let btnFlags = new Array(numberButtons.length).fill(false);
+
+    for (let i=0; i < submitAnswer.childNodes.length; i++) {
+        let child = submitAnswer.childNodes[i];
+        
+        child.addEventListener("click", function(e) {
+            e.stopPropagation();
+            btnFlags[i] = !btnFlags[i];
+            if (btnFlags[i]) {
+                child.classList.add("number-btn-clicked");
+            } else {
+                child.classList.remove("number-btn-clicked");
+            }
+            submitAnswer.style.visibility = "hidden";
+
+            if (callback) {
+                callback(e.target.textContent);
+            }
+        });
+    }
+}
+
+export function showAnswerField() {
+    const input = document.querySelector(".answer-container");
+    input.classList.add("answer-container-show");
+
+    let clickedInputField = [];
+
+    for (let i=0; i < input.childNodes.length; i++) {
+        let child = input.childNodes[i];
+
+        console.log(child);
+        child.addEventListener("click", function(e) {
+            e.stopPropagation(); // 이벤트 버블링 방지
+            console.log(e.target.dataset.answer);
+            showAnswerNumberField(e.target, function(clickedText) {
+                console.log("클릭된 텍스트 : " + clickedText);
+                e.target.textContent = clickedText;
+                clickedInputField.push(clickedText);
+                console.log(clickedInputField);
+            });
+        })
+    }
 }
