@@ -169,31 +169,35 @@ export function deckAnswerSetting(answer) {
     deckAnswerDiv.appendChild(answerTag);
 }
 
-export function showAnswerNumberField(clickedInput, callback) {
-    console.log(clickedInput);
-    const submitAnswer = clickedInput.querySelector(".answer-button-container");
-    console.log(submitAnswer);
-    submitAnswer.classList.add("answer-button-show");
-    submitAnswer.style.display = "flex";
-    const numberButtons = submitAnswer.children;
-    let btnFlags = new Array(numberButtons.length).fill(false);
+export function showAnswerNumberField(params, callback) {
+    console.log(params.target);
+    const answerContainer = params.target.querySelector(".answer-button-container");
+    const oneToSevenBox = Array.from(answerContainer.childNodes).filter((ele) => ele.nodeType === ele.ELEMENT_NODE);
+    console.log(params.open);
+    if (params.open) {
+        oneToSevenBox.forEach((box) => {
+            box.classList.add('answer-container-show');
+            box.removeEventListener("click", box._clickHandler);
 
-    for (let i=0; i < submitAnswer.childNodes.length; i++) {
-        let child = submitAnswer.childNodes[i];
-        
-        child.addEventListener("click", function(e) {
-            e.stopPropagation();
-            btnFlags[i] = !btnFlags[i];
-            if (btnFlags[i]) {
-                child.classList.add("number-btn-clicked");
-            } else {
-                child.classList.remove("number-btn-clicked");
-            }
-            submitAnswer.style.visibility = "hidden";
+            box._clickHandler = function (e) { // 이벤트 리스너를 변수에 저장하여 관리
+                const selectedNumber = e.target.innerText.trim();
+                // console.log("클릭된 번호:", selectedNumber);
+                // console.log("현재 params.target:", params.target);
 
-            if (callback) {
-                callback(e.target.textContent);
-            }
+                // const input = params.target.querySelector(".answer-result");
+                // input.innerText = selectedNumber;
+                
+                if (callback) {
+                    callback(selectedNumber);
+                }
+            };
+
+            box.addEventListener("click", box._clickHandler);
+        })
+    } else {
+        oneToSevenBox.forEach((box) => {
+            box.classList.remove('answer-container-show');
+            box.removeEventListener("click", box._clickHandler);
         });
     }
 }
@@ -201,22 +205,51 @@ export function showAnswerNumberField(clickedInput, callback) {
 export function showAnswerField() {
     const input = document.querySelector(".answer-container");
     input.classList.add("answer-container-show");
+    let boxFlag = [false, false, false];
 
-    let clickedInputField = [];
+    const answerNumberCellArray = Array.from(input.childNodes).filter((ele) => {
+        return ((ele.nodeType === ele.ELEMENT_NODE) && ele.classList.contains('answer-number-cell'));
+    });
 
-    for (let i=0; i < input.childNodes.length; i++) {
-        let child = input.childNodes[i];
+    answerNumberCellArray.forEach((answerNumberCell, index) => {
+        answerNumberCell.addEventListener("click", function (e) {
+            e.stopPropagation();
+            boxFlag[index] = !boxFlag[index];
+            const answerButtonContainer = e.target.querySelector(".answer-button-container");
 
-        console.log(child);
-        child.addEventListener("click", function(e) {
-            e.stopPropagation(); // 이벤트 버블링 방지
-            console.log(e.target.dataset.answer);
-            showAnswerNumberField(e.target, function(clickedText) {
-                console.log("클릭된 텍스트 : " + clickedText);
-                e.target.textContent = clickedText;
-                clickedInputField.push(clickedText);
-                console.log(clickedInputField);
+            showAndHideNumber(answerButtonContainer, boxFlag, index);
+        });
+
+        const answerNumberElements = answerNumberCell.querySelectorAll(".answer-number");
+        const answerResult = answerNumberCell.querySelector(".answer-result");
+        answerNumberElements.forEach((answerNumber) => {
+            answerNumber.addEventListener("click", function (e) {
+                e.stopPropagation();
+
+                answerResult.innerText = e.target.innerText;
+                boxFlag[index] = !boxFlag[index];
+
+                showAndHideNumber(e.target.parentNode, boxFlag, index);
             });
         })
+    })
+}
+
+function showAndHideNumber(ele, boxFlag, index) {
+    if (boxFlag[index]) {
+        ele.style.visibility = "visible";
+    } else {
+        ele.style.visibility = "hidden";
     }
+}
+
+export function checkAnswer() {
+    const submittedAnswer = document.querySelectorAll(".answer-result");
+
+    const submittedArray = [];
+    submittedAnswer.forEach((ele) => {
+        submittedArray.push(ele.innerText);
+    });
+
+    return submittedArray;
 }

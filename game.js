@@ -93,7 +93,6 @@ class Game {
         let answerYN = arrayHasElement(answer, playerHasAnswer);
         console.log(answerYN);
 
-
     }
 
     // 질문에 대답하기
