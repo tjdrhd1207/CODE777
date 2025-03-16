@@ -380,6 +380,7 @@ body {
     background-color: aliceblue;
     text-align: center;
     align-content: center;
+    z-index: 1;
 }
 
 .answer-result {
@@ -390,4 +391,49 @@ body {
     width: 50px;
     height: 30px;
     border-radius: 5px;
+    cursor: pointer;
+}
+
+.card-retrieve {
+    animation: center-card-deal 1s 1 linear;
+}
+
+@keyframes center-card-deal {
+    10% {
+        transform: perspective(800px) rotateY(180deg);
+    }
+
+    30% {
+        transform: perspective(800px) rotateY(180deg) translate(-100%, -50%);
+    }
+
+    100% {
+        transform: perspective(800px) rotateY(180deg) translate(-200%, -50%);
+    }
+    
+}
+
+.player-hand-card {
+    display: inline-grid;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: perspective(800px) rotateY(0deg);
+    transition: transform 0.6s;
+}
+
+.card-back {
+    width: 100px;  /* 카드덱의 크기 */
+    height: 150px; /* 카드덱의 크기 */
+    border-radius: 10px;  /* 카드덱의 테두리 */
+    transform: rotateY(180deg);
+}
+
+.player-hand-card > * {
+    grid-area: 1 / 1 / 1 / 1;
+    backface-visibility: hidden;
+}
+
+.player-hand-card:hover {
+    transform: perspective(800px) rotateY(180deg);
 }

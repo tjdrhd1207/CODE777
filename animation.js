@@ -71,6 +71,8 @@ export function animateDeal(card, players, elements) {
         playerNameTag.innerHTML = players[i].name;
         playerDiv.classList.add("div-alignment");
         playerDiv.classList.add(players[i].name);
+        playerDiv.classList.add(`player-${players[i].id}`);
+        playerDiv.dataset.playerId = players[i].id;
         playerNameTag.classList.add('name-font');
         playerDiv.appendChild(playerNameTag);
         playerDiv.appendChild(cardContainer);
@@ -86,8 +88,18 @@ export function animateDeal(card, players, elements) {
 
     for (let i = 0; i < totalCards; i++) {
         for (let j = 0; j < players.length; j++) {
+            const imgDiv = document.createElement("div");
+            imgDiv.classList.add("player-hand-card");
+            
             const imgTag = document.createElement("img");
+            const imgBack = document.createElement("img");
             imgTag.setAttribute("src", players[j].hand[i].src);
+
+            imgBack.setAttribute("src", "assets/back-card.png");
+            imgBack.classList.add("card-back");
+
+            imgDiv.appendChild(imgTag);
+            imgDiv.appendChild(imgBack);
 
             setTimeout(() => {
                 const animationClass = getAnimationClass(j, i);
@@ -105,7 +117,7 @@ export function animateDeal(card, players, elements) {
                 deckTail[currentCount].addEventListener("animationend", function onAnimationEnd() {
                     deckTail[currentCount].removeEventListener("animationend", onAnimationEnd);
                     const cardContainer = playerDivs[j].querySelector(".card-container");
-                    cardContainer.appendChild(imgTag);
+                    cardContainer.appendChild(imgDiv);
                 });
     
             }, (i * players.length + j) * delay);
@@ -252,4 +264,16 @@ export function checkAnswer() {
     });
 
     return submittedArray;
+}
+
+// 카드 회수 애니메이션
+export function retrieveAnimation(playerId) {
+    console.log(playerId);
+    const playerDiv = document.querySelector(`.player-${playerId}`);
+    console.log(playerDiv.childNodes);
+    const cardContainer = playerDiv.querySelector(".card-container");
+    console.log(cardContainer.childNodes);
+    cardContainer.childNodes.forEach((child) => {
+        child.classList.add("card-retrieve");
+    });
 }

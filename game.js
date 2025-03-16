@@ -2,7 +2,7 @@ import Board from "./board.js";
 import Deck from "./deck.js";
 import Card from "./card.js";
 import { arrayHasElement } from "./utils.js";
-import { animateShuffle, hintDeckDrawSetting, hideMyHand, hintDeckInitSetting, animateDeal, deckAnswerSetting } from "./animation.js";
+import { animateShuffle, hintDeckDrawSetting, hideMyHand, hintDeckInitSetting, animateDeal, deckAnswerSetting, retrieveAnimation } from "./animation.js";
 
 const GREEN = 'GREEN';
 const YELLOW = 'YELLOW';
@@ -92,6 +92,17 @@ class Game {
 
         let answerYN = arrayHasElement(answer, playerHasAnswer);
         console.log(answerYN);
+        // 정답
+        if (answerYN) {
+
+        } else {
+        // 오답
+            this.cardDeck.playerCardShuffle(player);
+            player.retrieve(); // 카드 회수
+            player.deal(this.cardDeck.card); //카드 다시 나누기
+            // 카드 나누기 애니메이션
+            retrieveAnimation(player.id);
+        }
 
     }
 

@@ -60,6 +60,13 @@ class Card {
         }
     }
 
+    playerCardShuffle(player) {
+        player.hand.forEach((handCard) => {
+            this.card.push(handCard);
+        });
+        this.shuffle();
+    }
+
     dealCards() {
         console.log(this.card);
         return this.card;

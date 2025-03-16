@@ -25,6 +25,10 @@ class Player {
         
     }
 
+    retrieve() {
+        this.hand.splice(0, this.hand.length);
+    }
+
 
 }
 
