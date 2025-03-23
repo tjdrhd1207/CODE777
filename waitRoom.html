@@ -4,8 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="assets/room.css" >
+    <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuid.min.js"></script>
+    <script type="module" src="room-main.js"></script>
 </head>
 <body>
-    
+    <div class="room-conatainer-head-tab">
+        <div class="empty-space"></div>
+        <div class="button-space">
+            <div class="open-modal">방 만들기</div>
+        </div>
+    </div>
+    <div class="room-container">
+        <table class="room-table">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>제목</td>
+                    <td>인원수</td>
+                    <td>턴당 시간</td>
+                    <td>대기중</td>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="openModal">
+        <div id="modalOverlay" class="modal-overlay">
+            <div class="modal">
+                <h2>방 만들기</h2>
+
+                <div class="input-group">
+                    <input type="text" id="room-name" class="ipt-room-info" placeholder="방 제목을 입력">
+                </div>
+
+                <div class="input-group">
+                    <select id="room-capacity"class="ipt-room-info">
+                        <option value="3">3명</option>
+                        <option value="4">4명</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <input type="number" id="room-turn-time" class="input-time ipt-room-info" min="30" max="60" value="45" placeholder="턴당 소요시간">
+                    <span class="unit">초</span>
+                </div>
+                
+                <div class="modal-button">
+                    <button id="createRoom" class="create-moadl-btn">생성</button>
+                    <button id="closeModal" class="close-moadl-btn">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,0 +1,106 @@
+@import url('https://fastly.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
+
+body {
+    font-family: 'Galmuri11';
+    background-color: #2a8a2a;
+}
+
+.room-conatainer-head-tab {
+    height: 100px;
+}
+
+.empty-space {
+    height: 50%;
+}
+
+.button-space {
+    height: 50%;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25%;
+    height: 40%;
+    background-color: #a8d18d;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.modal {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+.modal-button {
+    bottom: 5%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ipt-room-info {
+    border: 0;
+    outline: none;
+    background-color: #f9f9f947;
+    width: 80%;
+    height: 50%;
+}
+
+.input-group {
+    height: 15%;
+}
+
+.input-time {
+    width: 70%;
+}
+
+.open-modal {
+    display: flex;
+    width: 100px;
+    height: 80%;
+    text-align: center;
+    background-color: aliceblue;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.open-modal:hover {
+    background-color: aqua;
+}
+
+.room-container {
+
+}
+
+.room-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+thead > tr {
+    background-color: #2db12dd6;
+    height: 70px;
+    border-bottom: 3px solid #43363640;
+}
+
+tbody > tr {
+    cursor: pointer;
+    background-color: #82b382b5;
+    height: 70px;
+    border-bottom: 0.5px solid #68686833;
+}
+
+td {
+    height: 70px;
+    border-bottom: 2px solid #68686833;
+
+}

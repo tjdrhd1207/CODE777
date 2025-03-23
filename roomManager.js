@@ -3,8 +3,9 @@ import Room from "./room.js";
 class RoomManager {
     static rooms = new Map();
 
-    static createRoom(name) {
-        const room = new Room(name);
+    static createRoom(info) {
+        console.log(info);
+        const room = new Room(info);
         this.rooms.set(room.id, room);
         return room;
     }
@@ -20,3 +21,5 @@ class RoomManager {
         return this.rooms.get(roomId);
     }
 }
+
+export default RoomManager;

@@ -1,10 +1,11 @@
-import { v4 as uuid } from "uuid";
 
 class Room {
-    constructor(name, players) {
-        this.id = uuid();
-        this.name = name;
-        this.players = players;
+    constructor(room) {
+        this.id = 1;
+        this.name = room.name;
+        this.capacity = room.capacity;
+        this.turnTime = room.turnTime;
+        this.players = [];
     }
 
     join(player) {
@@ -24,3 +25,5 @@ class Room {
         }
     }
 }
+
+export default Room;

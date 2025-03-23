@@ -11,3 +11,7 @@ export function arrayHasElement(arr1, arr2) {
         value = arr2[index];
     });
 }
+
+export function generateUniqueId() {
+    return 'id-' + crypto.getRandomValues(new Uint32Array(1))[0];
+}
