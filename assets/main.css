@@ -1,0 +1,27 @@
+@import url('https://fastly.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
+
+body {
+    font-family: 'Galmuri11';
+    background-color: #2a8a2a;
+}
+
+
+.main {
+    font-size: 200px;
+    color: black;
+    text-shadow: -2px 0px yellow, 0px 2px yellow, 2px 0px yellow, 0px -2px yellow;
+    text-align: center;
+    animation: swingMotion 1s infinite steps(5);
+}
+
+@keyframes swingMotion {
+    0% {
+        transform: translateX(-5px);
+    }
+    50% {
+        transform: translateX(5px);
+    }
+    100% {
+        transform: translateX(-5px);
+    }
+}
