@@ -6,8 +6,10 @@ body {
     position: relative;
 }
 
-
 .main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 50vh;
     font-size: 200px;
     color: black;
@@ -15,6 +17,75 @@ body {
     text-align: center;
     animation: swingMotion 1s infinite steps(5);
 }
+
+.main-ul {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    padding-left: 0; /* 기본 padding 제거 */
+    width: 100%;
+    text-align: center;
+}
+
+.main-menu-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(80vh - 30rem);
+}
+
+/* 모바일 처리 */
+@media screen and (max-width: 768px) {
+    .main {
+        height: 50vh;
+        font-size: calc(45vw - 7rem);
+        color: black;
+        text-shadow: -2px 0px yellow, 0px 2px yellow, 2px 0px yellow, 0px -2px yellow;
+        text-align: center;
+        animation: swingMotion 1s infinite steps(5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+    
+    .main-ul > li {
+        font-size: 30px;  /* 폰트 크기도 적당히 조정 */
+        display: inline-block;
+        list-style-type: none;
+        background: #7ca287;
+        display: inline-block;
+        width: 40%;
+        align-self: center;
+        align-content: center;
+        height: 40%;
+        color: white;
+        text-shadow: -2px 0px black, 0px 2px black, 2px 0px black, 0px -2px black;
+        cursor: pointer;
+    }
+    
+}
+
+/* pc 화면 설정 */
+@media screen and (min-width: 769px) {
+    .main-ul > li {
+        font-size: 40px;
+        height: 30%;
+        width: 20%;
+        min-height: 100px;
+        background: #7ca287;
+        display: inline-block;
+        align-self: center;
+        align-content: center;
+        font-size: 50px;
+        color: white;
+        text-shadow: -2px 0px black, 0px 2px black, 2px 0px black, 0px -2px black;
+        cursor: pointer;
+        list-style-type: none;
+    }
+}
+
 
 @keyframes swingMotion {
     0% {
@@ -26,20 +97,4 @@ body {
     100% {
         transform: translateX(-5px);
     }
-}
-
-.main-menu-container {
-    min-height: calc(80vh - 20rem);
-    /* height: 30vh; */
-    text-align: center;
-}
-
-.main-ul {
-    list-style: none;
-    height: 100%;
-}
-
-.main-ul > li {
-    font-size: 40px;
-    height: 30%;
 }
