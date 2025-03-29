@@ -9,5 +9,9 @@ mainList.forEach((list) => {
         hoverSound.currentTime = -1000;
         hoverSound.play().catch(error => console.error('Sound play error', error));
         list.classList.add('clicked-list');
+        console.log(list.classList);
+        if (list.classList.contains("game-start")) {
+            window.location.href = "waitRoom.html";
+        }
     });
 });
