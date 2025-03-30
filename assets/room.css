@@ -124,3 +124,10 @@ td {
         transform: rotate(0deg);
     }
 }
+
+.btn {
+    width: 150px;
+    height: 75px;
+    background: #d1fbd6;
+
+}
