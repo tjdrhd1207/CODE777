@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="assets/room.css" >
+    <script type="module" src="lobby.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -11,12 +12,12 @@
         <div>
             <h1>빠르게 한판 하실분</h1>
         </div>
-        <div>
+        <div class="btn-container">
             <div class="btn">게임시작</div>
             <div class="btn">준비</div>
             <div class="btn">나가기</div>
         </div>
-        <div>
+        <div class="main-container">
             <table class="room-table">
                 <thead>
                     <tr>
@@ -29,6 +30,11 @@
             </table>
         </div>
         <div class="text-container">
+            <div class="particpant"></div>
+            <div class="show-messages-container"></div>
+            <div class="input-messages-container">
+                <input class="input-message">
+            </div>
         </div>
     </div>
     

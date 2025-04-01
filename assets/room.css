@@ -125,9 +125,47 @@ td {
     }
 }
 
+.btn-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
 .btn {
-    width: 150px;
+    width: 125px;
     height: 75px;
     background: #d1fbd6;
+    text-align: center;
+    align-content: center;
+    cursor: pointer;
+    justify-items: center;
+    border-radius: 5px;
+}
 
+.btn:last-child {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.particpant {
+    background: gray;
+    width: 100%;
+    height: 30px;
+}
+
+.show-messages-container {
+    width: 100%;
+    background: white;
+    height: 300px;
+}
+
+.main-container {
+    height: 50vh;
+}
+
+.input-messages-container > input{
+    width: 99.6%;
+    height: 30px;
+    margin-top: 5px;
+    font-size: 20px;
 }
