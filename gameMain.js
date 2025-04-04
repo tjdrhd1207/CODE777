@@ -3,6 +3,8 @@ const hoverSound = new Audio('assets/mouse-hover.mp3');
 let userInteracted = false;  // 사용자의 상호작용 여부
 
 const mainList = document.querySelectorAll('.main-list');
+const roomListHTML = "roomList.html";
+
 
 mainList.forEach((list) => {
     list.addEventListener('click', () => {
@@ -11,7 +13,7 @@ mainList.forEach((list) => {
         list.classList.add('clicked-list');
         console.log(list.classList);
         if (list.classList.contains("game-start")) {
-            window.location.href = "waitRoom.html";
+            window.location.href = roomListHTML;
         }
     });
 });

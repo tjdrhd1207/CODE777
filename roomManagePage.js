@@ -5,6 +5,7 @@ const openCreateRoomModal = document.querySelector(".open-modal");
 const modal = document.querySelector(".modal-overlay");
 const closeModal = document.querySelector("#closeModal");
 const createRoomBtn = document.querySelector("#createRoom");
+const roomList = document.querySelector(".room-list");
 
 let roomNumber = 1;
 
@@ -14,6 +15,10 @@ openCreateRoomModal.addEventListener("click", () => {
 
 closeModal.addEventListener("click", () => {
     modal.style.display = "none";
+});
+
+roomList.addEventListener("dblclick", () => {
+    window.location.href = "lobby.html";
 })
 
 createRoomBtn.addEventListener("click", () => {
