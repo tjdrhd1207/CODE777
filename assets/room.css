@@ -155,6 +155,7 @@ td {
     font-size: 20px;
 }
 
+/* 모바일 */
 @media screen and (max-width: 768px) {
     .modal-overlay {
         width: 50%;
@@ -171,6 +172,7 @@ td {
     }
 }
 
+/* PC화면 */
 @media screen and (min-width: 768px) {
     .modal-overlay {
         display: none;
