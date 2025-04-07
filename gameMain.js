@@ -1,5 +1,5 @@
 const hoverSound = new Audio('assets/mouse-hover.mp3');
-const mongoUrl = "mongodb+srv://jaemin:<db_password>@cluster0.3lo3bxi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const mongoUrl = "mongodb+srv://jaemin:sjk@931207@cluster0.3lo3bxi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 let userInteracted = false;  // 사용자의 상호작용 여부
 
@@ -28,7 +28,16 @@ mainList.forEach((list) => {
 createUserBtn.addEventListener("click", () => {
     console.log(loginId.value);
     console.log(loginPwd.value);
-    fetch("http://localhost:3000/data")
+    fetch("http://localhost:3000/data", {
+        method: 'POST',  // ✅ 여기에 method 지정
+        headers: {
+            'Content-Type': 'application/json',  // ✅ JSON으로 보낸다는 명시
+        },
+        body: JSON.stringify({
+            id : loginId.value,
+            pwd : loginPwd.value
+        }),
+    })
         .then(res => res.json())
         .then(data => {
             console.log("게임데이터 : ", data);
