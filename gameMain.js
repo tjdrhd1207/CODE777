@@ -35,7 +35,7 @@ createUserBtn.addEventListener("click", () => {
         },
         body: JSON.stringify({
             id : loginId.value,
-            pwd : loginPwd.value
+            pw : loginPwd.value
         }),
     })
         .then(res => res.json())
