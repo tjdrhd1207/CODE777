@@ -176,7 +176,6 @@ body {
     outline: none;
     background-color: rgb(173, 148, 148);
     height: 35px;
-    width: 130px;
 }
 
 .input-group {
@@ -221,4 +220,9 @@ body {
     100% {
         transform: scale(1.0); /* ✅ 오타 수정 */
     }
+}
+
+
+.create-modal-btn {
+    background-color: beige;
 }
