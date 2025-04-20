@@ -2,22 +2,28 @@ const express = require("express");
 const router = express.Router();
 
 router.post("/selectUser", async (req, res) => {
+    const db = req.app.locals.db;
     const { id, pw } = req.body;
 
     try {
-        const selectUser = await db.collection("user").findOne({ id });
+        const user = await db.collection("user").findOne({ id });
 
-        if (selectUser) {
-            // 아이디존재 && 비밀번호는 같으면
-            if (selectUser.pw === pw) {
-                res.send({ code: 1 }) // 로그인 성공
-            } else {
-                res.send({ code: 0 }) // 로그인 실패
-            }
+        if (!user) {
+            return res.send({ code: 0, message: "아이디 없음" });
         }
+
+        if (user.pw !== pw) {
+            return res.send({ code: 0, message: "비밀번호 불일치" });
+        }
+
+        // ✅ 여기서 세션에 사용자 정보 저장
+        req.session.user = { id: user.id };
+
+        console.log("✅ 로그인 성공, 세션 설정:", req.session.user);
+        return res.send({ code: 1 });
     } catch (err) {
-        console.error("요청 처리중 오류", err);
-        res.status(500).send({ code: -1, message: "요청 처리 중 오류 "});
+        console.error("로그인 에러:", err);
+        res.status(500).send({ code: -1 });
     }
 });
 

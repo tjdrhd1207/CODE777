@@ -1,10 +1,12 @@
+let BACKEND_URL = "http://localhost:3030";
+
 document.addEventListener("DOMContentLoaded", async function() {
     const initMessage = document.getElementById("welcom-message");
     let user;
 
     // 서버에 로그인 상태 확인 요청
     try {
-        const response = await fetch("http://localhost:3000/check-login", {
+        const response = await fetch(`${BACKEND_URL}/check-login`, {
             withCredentials: true,
         });
         const data = await response.json();
@@ -15,6 +17,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         } */
     } catch (error) {
         console.error(error);
+        res.status(500).send({ code: -1, message: "요청 처리 중 오류" });
     }
 
     //유저 데이터 조회
@@ -65,11 +68,12 @@ mainList.forEach((list) => {
 createUserBtn.addEventListener("click", () => {
     console.log(loginId.value);
     console.log(loginPwd.value);
-    fetch("http://localhost:3000/createUser", {
+    fetch(`${BACKEND_URL}/createUser/create`, {
         method: 'POST',  // ✅ 여기에 method 지정
         headers: {
-            'Content-Type': 'application/json',  // ✅ JSON으로 보낸다는 명시
+            'Content-Type': 'application/json',  // ✅ JSON으로 보낸다는 명시,
         },
+        credentials: "include",
         body: JSON.stringify({
             id: loginId.value,
             pw: loginPwd.value
@@ -78,7 +82,17 @@ createUserBtn.addEventListener("click", () => {
         .then(res => res.json())
         .then(data => {
             console.log("게임데이터 : ", data);
-        });
+
+            //회원가입 성공 시
+            if (data.code === 1) { 
+                window.location.href = "roomList.html";
+            } else if (data.code === 0) {
+                alert("이미 존재하는 아이디입니다.");
+            }
+        })
+        .catch(err => {
+            console.error("에러 발생: ", err);
+        })
 });
 
 document.querySelector('#openModal').addEventListener("keydown", (e) => {
@@ -96,7 +110,7 @@ loginUserBtn.addEventListener("click", () => {
 })
 
 function loginFetch() {
-    fetch("http://localhost:3000/selectUser", {
+    fetch(`${BACKEND_URL}/selectUser`, {
         method: 'POST',  // ✅ 여기에 method 지정
         headers: {
             'Content-Type': 'application/json',  // ✅ JSON으로 보낸다는 명시

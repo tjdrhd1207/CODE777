@@ -18,9 +18,11 @@
   "homepage": "https://github.com/tjdrhd1207/CODE777#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "mongodb": "^6.15.0",
+    "openurl": "^1.1.1",
     "uuid": "^11.1.0"
   }
 }
