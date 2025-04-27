@@ -110,7 +110,7 @@ loginUserBtn.addEventListener("click", () => {
 })
 
 function loginFetch() {
-    fetch(`${BACKEND_URL}/selectUser`, {
+    fetch(`${BACKEND_URL}/login/selectUser`, {
         method: 'POST',  // ✅ 여기에 method 지정
         headers: {
             'Content-Type': 'application/json',  // ✅ JSON으로 보낸다는 명시
@@ -127,7 +127,7 @@ function loginFetch() {
             if (data.code === 1) {
                 window.location.href = roomListHTML;
             } else {
-                console.log('실패');
+                alert(data.message);
             }
         })
 }

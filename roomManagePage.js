@@ -2,6 +2,8 @@ import RoomManager from "./roomManager.js";
 import { generateUniqueId } from "./utils.js";
 import { checkLoginOrRedirect } from "./frontend/auth/auth.js";
 
+let BACKEND_URL = "http://localhost:3030";
+
 document.addEventListener("DOMContentLoaded", async function() {
     const userId = await checkLoginOrRedirect();
 
@@ -12,6 +14,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     if (userId.trim() != "") {
         userDiv.textContent += userId;
         userDiv.textContent += "님 환영합니다.";
+        selectRoomList();
     } else {
 
     }
@@ -48,8 +51,10 @@ createRoomBtn.addEventListener("click", () => {
         capacity: roomCapacity.value,
         turnTime: roomTurnTime.value    
     });
+
     createRoomInTable(roomInfo);
     RoomManager.createRoom(roomInfo);
+    createRoomFetch(roomInfo);
 
     modal.style.display = "none";
     roomNumber += 1;
@@ -62,7 +67,7 @@ createRoomBtn.addEventListener("click", () => {
 const createRoomInTable = (roomInfo) => {
     const roomTable = document.querySelector(".room-table tbody");
     const newRow = document.createElement("tr");
-
+    console.log(roomInfo);
     newRow.innerHTML = `
         <td>${roomNumber}</td>
         <td>${roomInfo.name}</td>
@@ -72,4 +77,49 @@ const createRoomInTable = (roomInfo) => {
     `;
     
     roomTable.appendChild(newRow);
+}
+
+function createRoomFetch(roomInfo) {
+    fetch(`${BACKEND_URL}/createRoom`, {
+        method: 'POST',
+        headers: {
+            'Content-Type' : 'application/json',
+        },
+        body: JSON.stringify({
+            id: roomInfo.id,
+            name: roomInfo.name,
+            capacity: roomInfo.capacity,
+            turnTime: roomInfo.turnTime
+        }),
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.code === 1) {
+                console.log('성공');
+            } else {
+                console.log('실패');
+            }
+        })
+}
+
+function selectRoomList(roomInfo) {
+    fetch(`${BACKEND_URL}/selectRoom`, {
+        method: 'GET',
+        headers: {
+            'Content-Type' : 'application/json',
+        },
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.code === 1) {
+                console.log('성공');
+                const searchedRoomList = data.list;
+                console.log(searchedRoomList);
+                searchedRoomList.forEach((room) => {
+                    createRoomInTable(room);
+                });
+            } else {
+                console.log('실패');
+            }
+        });
 }

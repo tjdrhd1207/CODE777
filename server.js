@@ -1,20 +1,14 @@
 const express = require("express");
 const openurl = require("openurl");
+const path = require("path");
 const cors = require("cors");
 const session = require("express-session");
 const { MongoClient } = require("mongodb");
-const loginRouter = require("./backend/router/login-router");
-const logoutRouter = require("./backend/router/logout-router");
-const userRouter = require("./backend/router/user-router");
-const checkLoginRouter = require("./backend/router/check-login-router");
-const crateUserRouter = require("./backend/router/create-user-router");
 
-let frontendURL = "http://localhost:5500";
+const registerRouters = require("./backend/router/router-index"); // 🎯 이거 하나로 라우터 전체 등록
 
-const {
-    isAuthenticated, // 인증된 사용자만 접근 가능한 미들웨어
-    isNotAuthenticated // 인증되지 않은 사용자만 접근 가능한 미들웨어
-} = require("./backend/middleware/auth-middleware");
+let frontendURL = "http://localhost:3030";
+
 const app = express();
 const port = 3030;
 let db;
@@ -44,19 +38,19 @@ app.use(
     })
 );
 
-// 라우터 설정
-app.use("/login", isAuthenticated, loginRouter);// 로그인되지 않은 사용자만 접근 가능
-app.use("/logout", logoutRouter);               // 로그아웃
-app.use("/user", isAuthenticated, userRouter);  //유저 조회 로그인된 사용자만 접근 가능
-app.use("/check-login", checkLoginRouter);      // 로그인 확인
-app.use("/createUser", isNotAuthenticated, crateUserRouter); //유저 생성
+app.use(express.static(path.join(__dirname)));
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "CODE777", "main.html"));
+})
+
+registerRouters(app);
 
 // 에러 처리 미들웨어
 app.use((err, req, res, next) => {
-    console.error("미들웨어 에러");
+    console.error("🔥 발생한 에러:", err.stack);
     res.status(500).send("500에러 발생");
 })
-
 
 async function startServer() {
     try {
@@ -68,7 +62,7 @@ async function startServer() {
         app.listen(port, () => {
             console.log("🚀 서버 실행 중 (http://localhost:3030)");
 
-            openurl.open(`${frontendURL}/CODE777/main.html`);
+            openurl.open(`${frontendURL}/main.html`);
         });
     } catch (err) {
         console.error("MongoDB 연결 실패", err);
