@@ -9,6 +9,8 @@ class Room {
     }
 
     join(player) {
+        console.log("플레이어 입장");
+        console.log(player);
         this.players.push(player);
     }
 

@@ -1,18 +1,20 @@
 import RoomManager from "./roomManager.js";
+import Room from "./room.js";
 import { generateUniqueId } from "./utils.js";
 import { checkLoginOrRedirect } from "./frontend/auth/auth.js";
 
 let BACKEND_URL = "http://localhost:3030";
+let currentUserId = null;
 
 document.addEventListener("DOMContentLoaded", async function() {
-    const userId = await checkLoginOrRedirect();
+    const currentUserId = await checkLoginOrRedirect();
 
-    if (!userId) return;
+    if (!currentUserId) return;
 
-    console.log("유저 id : "+ userId);
+    console.log("유저 id : "+ currentUserId);
     const userDiv = document.querySelector(".user-id");
-    if (userId.trim() != "") {
-        userDiv.textContent += userId;
+    if (currentUserId.trim() != "") {
+        userDiv.textContent += currentUserId;
         userDiv.textContent += "님 환영합니다.";
         selectRoomList();
     } else {
@@ -36,7 +38,9 @@ closeModal.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
-roomList.addEventListener("dblclick", () => {
+roomList.addEventListener("dblclick", (e) => {
+    console.log(e.target);
+    Room.join(currentUserId);
     window.location.href = "lobby.html";
 })
 
@@ -52,8 +56,6 @@ createRoomBtn.addEventListener("click", () => {
         turnTime: roomTurnTime.value    
     });
 
-    createRoomInTable(roomInfo);
-    RoomManager.createRoom(roomInfo);
     createRoomFetch(roomInfo);
 
     modal.style.display = "none";
@@ -96,7 +98,10 @@ function createRoomFetch(roomInfo) {
         .then(data => {
             if (data.code === 1) {
                 console.log('성공');
+                createRoomInTable(roomInfo);
+                RoomManager.createRoom(roomInfo);            
             } else {
+                alert('방이름이 중복됩니다.');
                 console.log('실패');
             }
         })

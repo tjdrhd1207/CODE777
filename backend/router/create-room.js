@@ -6,9 +6,9 @@ router.post("/", async (req, res) => {
     const { id, name, capacity, turnTime} = req.body;
 
     try {
-        const existingRoom = await db.collection("room").findOne({ id });
-
+        const existingRoom = await db.collection("room").findOne({ name });
         if (existingRoom) {
+            console.log('방중복');
             return res.send({ code: 0 });
         }
 
