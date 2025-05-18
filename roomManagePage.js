@@ -1,5 +1,5 @@
-import RoomManager from "./roomManager.js";
-import Room from "./room.js";
+import RoomManager from './roomManager.js';
+import Room from './room.js';
 import { generateUniqueId } from "./utils.js";
 import { checkLoginOrRedirect } from "./frontend/auth/auth.js";
 
@@ -7,7 +7,7 @@ let BACKEND_URL = "http://localhost:3030";
 let currentUserId = null;
 
 document.addEventListener("DOMContentLoaded", async function() {
-    const currentUserId = await checkLoginOrRedirect();
+    currentUserId = await checkLoginOrRedirect();
 
     if (!currentUserId) return;
 
@@ -39,8 +39,11 @@ closeModal.addEventListener("click", () => {
 });
 
 roomList.addEventListener("dblclick", (e) => {
-    console.log(e.target);
-    Room.join(currentUserId);
+    let targetRoom = e.target.closest(".room");
+    let roomId = targetRoom.dataset.roomInfo;
+    console.log(RoomManager.getRoom(roomId));
+    let selectedRoom = RoomManager.getRoom(roomId);
+    selectedRoom.join(currentUserId);
     window.location.href = "lobby.html";
 })
 
@@ -52,8 +55,8 @@ createRoomBtn.addEventListener("click", () => {
     const roomInfo = Object.assign({}, {
         id: generateUniqueId(),
         name: roomName.value,
-        capacity: roomCapacity.value,
-        turnTime: roomTurnTime.value    
+        capacity: parseInt(roomCapacity.value),
+        turnTime: parseInt(roomTurnTime.value)    
     });
 
     createRoomFetch(roomInfo);
@@ -61,7 +64,7 @@ createRoomBtn.addEventListener("click", () => {
     modal.style.display = "none";
     roomNumber += 1;
     roomName.value = "";
-    roomCapacity.selectIndex = 0;
+    roomCapacity.selectedIndex = 0;
     roomTurnTime.value = 45;
 })
 
@@ -69,12 +72,13 @@ createRoomBtn.addEventListener("click", () => {
 const createRoomInTable = (roomInfo) => {
     const roomTable = document.querySelector(".room-table tbody");
     const newRow = document.createElement("tr");
-    console.log(roomInfo);
+    newRow.classList.add("room");
+    newRow.dataset.roomInfo = roomInfo.id;
     newRow.innerHTML = `
-        <td>${roomNumber}</td>
-        <td>${roomInfo.name}</td>
-        <td>1/${roomInfo.capacity}</td>
-        <td>${roomInfo.turnTime}</td>
+        <td class=room-number>${roomNumber}</td>
+        <td class=room-name>${roomInfo.name}</td>
+        <td class=room-capacity>1/${roomInfo.capacity}</td>
+        <td ckass=room-turntime>${roomInfo.turnTime}</td>
         <td>대기중</td>
     `;
     
@@ -117,14 +121,17 @@ function selectRoomList(roomInfo) {
         .then(res => res.json())
         .then(data => {
             if (data.code === 1) {
-                console.log('성공');
                 const searchedRoomList = data.list;
-                console.log(searchedRoomList);
-                searchedRoomList.forEach((room) => {
-                    createRoomInTable(room);
-                });
+                registerRooms(searchedRoomList);
             } else {
                 console.log('실패');
             }
         });
+}
+
+function registerRooms(roomList) {
+    roomList.forEach(roomData => {
+        createRoomInTable(roomData);            // UI 렌더링
+        RoomManager.registerFromData(roomData); // 상태 등록
+    })
 }

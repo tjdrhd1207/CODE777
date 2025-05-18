@@ -17,4 +17,4 @@ function isNotAuthenticated(req, res, next) {
     }
 }
 
-module.exports = { isAuthenticated, isNotAuthenticated };
+export { isAuthenticated, isNotAuthenticated };

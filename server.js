@@ -1,17 +1,21 @@
-const express = require("express");
-const openurl = require("openurl");
-const path = require("path");
-const cors = require("cors");
-const session = require("express-session");
-const { MongoClient } = require("mongodb");
+// AFTER (ESM)
+import express from "express";
+import openurl from "openurl";
+import path from "path";
+import cors from "cors";
+import session from "express-session";
+import { MongoClient } from "mongodb";
 
-const registerRouters = require("./backend/router/router-index"); // 🎯 이거 하나로 라우터 전체 등록
+import registerRouters from "./backend/router/router-index.js";
+import RoomManager from "./roomManager.js";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 let frontendURL = "http://localhost:3030";
 
 const app = express();
 const port = 3030;
-let db;
+// let db;
 
 const uri = "mongodb+srv://jaemin:hansol@cluster0.3lo3bxi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 const client = new MongoClient(uri);
@@ -38,6 +42,9 @@ app.use(
     })
 );
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 app.use(express.static(path.join(__dirname)));
 
 app.get("/", (req, res) => {
@@ -55,13 +62,13 @@ app.use((err, req, res, next) => {
 async function startServer() {
     try {
         await client.connect();
-        db = client.db("game");
+        const db = client.db("game");
         app.locals.db = db;
+        await RoomManager.initRoomFromDb(db);
         console.log ("✅ MongoDB 연결 성공");
 
         app.listen(port, () => {
             console.log("🚀 서버 실행 중 (http://localhost:3030)");
-
             openurl.open(`${frontendURL}/main.html`);
         });
     } catch (err) {

@@ -1,17 +1,19 @@
+import RoomManager from "./roomManager.js";
 
 class Room {
-    constructor(room) {
-        this.id = 1;
-        this.name = room.name;
-        this.capacity = room.capacity;
-        this.turnTime = room.turnTime;
-        this.players = [];
+    constructor({ id, name, capacity, turnTime }) {
+        this.id = id;
+        this.name = name;
+        this.capacity = capacity;
+        this.turnTime = turnTime;
+        this.players = new Set();
     }
 
     join(player) {
         console.log("플레이어 입장");
         console.log(player);
-        this.players.push(player);
+        console.log(this.players);
+        this.players.add(player);
     }
 
     exit(player) {
@@ -26,6 +28,20 @@ class Room {
             RoomManager.deleteRoom(this.id);
         }
     }
+
+    get() {
+        let info = {
+            id: this.id,
+            name: this.name
+        };
+        return info;
+    }
 }
 
+// esm모듈
 export default Room;
+
+// commonJS 호환
+if (typeof module !== "undefined") {
+    module.exports = Room;
+}

@@ -1,4 +1,4 @@
-const express = require("express");
+import express from "express";              // ✅ ESM 방식
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -13,4 +13,4 @@ router.get("/", async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

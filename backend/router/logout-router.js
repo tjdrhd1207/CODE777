@@ -1,4 +1,4 @@
-const express = require("express");
+import express from "express";              // ✅ ESM 방식
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -7,4 +7,4 @@ router.get("/", (req, res) => {
         .json({ message: "유저 조회 성공", user: req.session.id });
 });
 
-module.exports = router;
+export default router;
