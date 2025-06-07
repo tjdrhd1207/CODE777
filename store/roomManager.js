@@ -1,4 +1,4 @@
-import Room from "./room.js";
+import Room from "../room/room.js";
 
 class RoomManager {
     static rooms = new Map();

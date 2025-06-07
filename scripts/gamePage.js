@@ -1,14 +1,11 @@
-import Player from "./player.js";
-import Game from "./game.js";
-import { animateDeal, showAnswerField, checkAnswer } from "./animation.js";
+import Player from "../game/model/player.js"; 
+import Game from "../game/Game.js";
+import { animateDeal, showAnswerField, checkAnswer } from "../game/logic/animation.js";
 
 const shuffleBtn = document.querySelector(".shuffle-button");
 const nextTurn = document.querySelector(".next-turn-button");
-
 const attemptAnswerBtn = document.querySelector(".attempt-answer-button");
 const submiAnswerBtn = document.querySelector(".submit-answer");
-
-const deck = document.querySelector(".card-deck");
 
 const player1 = new Player("나", 0);
 const player2 = new Player("용준", 1);

@@ -1,4 +1,4 @@
-class Deck {
+class QuestionDeck {
     constructor() {
         this.deckCards = [
             { seq: 1, question: '숫자의 합이 18 이상인 선반은 몇 개입니까?' },
@@ -53,4 +53,4 @@ class Deck {
     }
 }
 
-export default Deck;
+export default QuestionDeck;

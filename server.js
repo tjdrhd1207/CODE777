@@ -7,7 +7,7 @@ import session from "express-session";
 import { MongoClient } from "mongodb";
 
 import registerRouters from "./backend/router/router-index.js";
-import RoomManager from "./roomManager.js";
+import RoomManager from "./store/roomManager.js";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -48,7 +48,7 @@ const __dirname = dirname(__filename);
 app.use(express.static(path.join(__dirname)));
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "CODE777", "main.html"));
+    res.sendFile(path.join(__dirname, "CODE777", "index.html"));
 })
 
 registerRouters(app);
@@ -69,7 +69,7 @@ async function startServer() {
 
         app.listen(port, () => {
             console.log("🚀 서버 실행 중 (http://localhost:3030)");
-            openurl.open(`${frontendURL}/main.html`);
+            openurl.open(`${frontendURL}/index.html`);
         });
     } catch (err) {
         console.error("MongoDB 연결 실패", err);

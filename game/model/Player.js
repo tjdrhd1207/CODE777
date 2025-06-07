@@ -1,11 +1,11 @@
-import Card from './card.js';
+import Card from './game/card.js';
 
 class Player {
     constructor(name, id) {
         this.name = name;
         this.id = id;
         this.hand = [];
-        
+        this.coin = 0; //승리 코인
     }
 
     drawDeck() {
@@ -29,6 +29,13 @@ class Player {
         this.hand.splice(0, this.hand.length);
     }
 
+    playerWin() {
+        this.coin += 1;
+    }
+
+    getCoin() {
+        return this.coin;
+    }
 
 }
 
