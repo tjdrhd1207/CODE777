@@ -10,15 +10,27 @@ import registerRouters from "./backend/router/router-index.js";
 import RoomManager from "./store/roomManager.js";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import http from 'http';
+import { Server } from 'socket.io';
+import setupSocket from './socket/index.js';
 
 let frontendURL = "http://localhost:3030";
+// const http = require('http');
+// const { Server } = require('socket.io');
+// const setupSocket = require('./socket');
+
 
 const app = express();
 const port = 3030;
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: '*' } });
+
+setupSocket(io); // socket관련 설정 모듈
 // let db;
 
 const uri = "mongodb+srv://jaemin:hansol@cluster0.3lo3bxi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 const client = new MongoClient(uri);
+
 
 app.use(cors({
     origin: frontendURL,

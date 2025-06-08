@@ -6,6 +6,7 @@ router.get("/", async (req, res) => {
 
     try {
         const selectRoomList = await db.collection("room").find({}).toArray();        
+        console.log('방 조회');
         res.send({ code: 1, list: selectRoomList });
     } catch (err) {
         console.error("룸 조회 요청 처리중 오류" , err);

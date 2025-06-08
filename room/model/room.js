@@ -1,4 +1,4 @@
-import RoomManager from "../store/roomManager.js";
+import RoomManager from "../../store/roomManager.js";
 
 class Room {
     constructor({ id, name, capacity, turnTime }) {

@@ -15,9 +15,9 @@ export function initMainPage() {
             const data = await response.json();
             console.log(data);
             // 로그인 상태가 아니라면 로그인 페이지로 리디렉션
-            /* if (!data.loggedIn) {
-                window.location.href = "main.html";
-            } */
+            if (!data.loggedIn) {
+                location.hash = '/';
+            }
         } catch (error) {
             console.error(error);
             res.status(500).send({ code: -1, message: "요청 처리 중 오류" });
@@ -33,7 +33,7 @@ export function initMainPage() {
             console.error(error);
             //만약 로그인 상태가 아닌 경우 로그인 페이지로 리디렉션
             if (error.response.status === 403) {
-                window.location.href = "main.html";
+                location.hash = '/';
             }
         }
 
@@ -63,7 +63,6 @@ export function initMainPage() {
             console.log(list.classList);
             if (list.classList.contains("game-start")) {
                 modal.style.display = "flex";
-                // window.location.href = roomListHTML;
             }
         });
     });
@@ -88,7 +87,7 @@ export function initMainPage() {
 
                 //회원가입 성공 시
                 if (data.code === 1) { 
-                    window.location.href = "roomList.html";
+                    location.hash = '/roomList';
                 } else if (data.code === 0) {
                     alert("이미 존재하는 아이디입니다.");
                 }

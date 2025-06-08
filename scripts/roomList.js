@@ -6,23 +6,21 @@ import { checkLoginOrRedirect } from "../frontend/auth/auth.js";
 let BACKEND_URL = "http://localhost:3030";
 let currentUserId = null;
 
-export function initRoomListPage() {
+export async function initRoomListPage() {
 
-    document.addEventListener("DOMContentLoaded", async function() {
-        currentUserId = await checkLoginOrRedirect();
+    currentUserId = await checkLoginOrRedirect();
+
+    if (!currentUserId) return;
+
+    console.log("유저 id : "+ currentUserId);
+    const userDiv = document.querySelector(".user-id");
+    if (currentUserId.trim() != "") {
+        userDiv.textContent += currentUserId;
+        userDiv.textContent += "님 환영합니다.";
+        selectRoomList();
+    } else {
     
-        if (!currentUserId) return;
-    
-        console.log("유저 id : "+ currentUserId);
-        const userDiv = document.querySelector(".user-id");
-        if (currentUserId.trim() != "") {
-            userDiv.textContent += currentUserId;
-            userDiv.textContent += "님 환영합니다.";
-            selectRoomList();
-        } else {
-        
-        }
-    });
+    }
     
     const openCreateRoomModal = document.querySelector(".open-modal");
     const modal = document.querySelector(".modal-overlay");
@@ -40,14 +38,19 @@ export function initRoomListPage() {
         modal.style.display = "none";
     });
     
+    // 방 입장
     roomList.addEventListener("dblclick", (e) => {
         let targetRoom = e.target.closest(".room");
         let roomId = targetRoom.dataset.roomInfo;
+        console.log('룸번호 : ');
         console.log(RoomManager.getRoom(roomId));
         let selectedRoom = RoomManager.getRoom(roomId);
         selectedRoom.join(currentUserId);
-        window.location.href = "lobby.html";
-    })
+
+        localStorage.setItem('selectedRoom', JSON.stringify(selectedRoom));
+
+        location.hash = '/lobby';
+    });
     
     createRoomBtn.addEventListener("click", () => {
         const roomName = document.querySelector("#room-name");

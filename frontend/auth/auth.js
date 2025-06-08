@@ -14,13 +14,13 @@ export async function checkLoginOrRedirect() {
             return data.user.id; //로그인된 사용자 id 반환
         } else {
             alert ("로그인이 필요합니다.");
-            // window.location.href = "main.html";
+            location.href = '/';
             return null;
         }
     }
     catch (err) {
         console.error("[auth.js] 세션 확인 실패:", err);
-        // window.location.href = "main.html";
+        location.href = '/';
         return null;
     }
 }
