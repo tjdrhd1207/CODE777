@@ -140,4 +140,5 @@ export async function initRoomListPage() {
             RoomManager.registerFromData(roomData); // 상태 등록
         })
     }
+
 }

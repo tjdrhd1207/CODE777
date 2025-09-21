@@ -36,6 +36,13 @@ class Room {
         };
         return info;
     }
+
+    status() {
+        this.players.forEach((value) => {
+            console.log(value);
+        });
+
+    }
 }
 
 // esm모듈

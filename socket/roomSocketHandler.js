@@ -1,27 +1,64 @@
 // roomSocketHandler.js
-const rooms = {};
+const rooms = {};      // roomId별 참가자 리스트
+const readyStates = {}; // roomId별 준비 상태
 
 export default function roomSocketHandler(io, socket) {
     socket.on('joinRoom', ({ roomId, userId }) => {
         console.log(`유저 ${userId}방 ${roomId} 입장`);
 
-        if (!rooms[roomId]) {
-            rooms[roomId] = [];
-        }
+        if (!rooms[roomId]) rooms[roomId] = [];
+        if (!readyStates[roomId]) readyStates[roomId] = {};
 
         if (!rooms[roomId].includes(userId)) {
             rooms[roomId].push(userId);
         }
 
-        io.emit('updateParticipants', { roomId, participants: rooms[roomId] });
+        // 소켓 Socket.IO 룸에 join
+        socket.join(roomId);
+        socket.roomId = roomId;  // 나중에 disconnect 시 사용
+        socket.userId = userId;  // 나중에 disconnect 시 사용
+
+
+        // 유저 준비상태 초기화
+        readyStates[roomId][userId] = false;
+
+        io.to(roomId).emit('updateParticipants', { roomId, participants: rooms[roomId] });
     });
 
     socket.on('leaveRoom', ({ roomId, userId }) => {
-        console.log(`유저 ${userId}방 ${roomId} 퇴장`);
+        console.log(`유저 ${userId} 방 ${roomId} 퇴장`);
 
         if (rooms[roomId]) {
             rooms[roomId] = rooms[roomId].filter(id => id !== userId);
-            io.emit('updateParticipants', { roomId, participants: rooms[roomId] });
         }
+
+        if (readyStates[roomId]) {
+            delete readyStates[roomId][userId];
+        }
+
+        socket.leave(roomId);
+
+        io.to(roomId).emit('updateParticipants', { roomId, participants: rooms[roomId] });
     });
+
+    socket.on("playerReady", ({ roomId, userId }) => {
+        console.log("준비 이벤트 받음", roomId, userId);
+        readyStates[roomId][userId] = true;
+
+        // 해당 방에 준비 상태 업데이트
+        io.to(roomId).emit("updateReadyState", { userId, ready: true });
+    });
+
+    socket.on("disconnect", () => {
+        console.log(`소켓 ${socket.id} 연결 종료`);
+
+        // 모든 룸에서 소켓 제거
+        if (socket.roomId) {
+            const roomId = socket.roomId;
+            rooms[roomId] = rooms[roomId].filter(id => id !== socket.userId);
+            delete readyStates[roomId][socket.userId];
+
+            io.to(roomId).emit('updateParticipants', { roomId, participants: rooms[roomId] });
+        }
+    })
 }

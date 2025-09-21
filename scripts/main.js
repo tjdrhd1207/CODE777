@@ -46,7 +46,7 @@ export function initMainPage() {
     let userInteracted = false;  // 사용자의 상호작용 여부
 
     const mainList = document.querySelectorAll('.main-list');
-    const roomListHTML = "roomList.html";
+    // const roomListHTML = "roomList.html";
     // const openLoginModal = document.querySelector(".open-modal");
     const modal = document.querySelector(".modal-overlay");
     const createUserBtn = document.querySelector("#createUser");

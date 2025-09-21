@@ -25,6 +25,8 @@ const port = 3030;
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 
+io.on('connection', socket => console.log('🔥 새 연결:', socket.id));
+
 setupSocket(io); // socket관련 설정 모듈
 // let db;
 
@@ -79,7 +81,7 @@ async function startServer() {
         await RoomManager.initRoomFromDb(db);
         console.log ("✅ MongoDB 연결 성공");
 
-        app.listen(port, () => {
+        server.listen(port, () => {
             console.log("🚀 서버 실행 중 (http://localhost:3030)");
             openurl.open(`${frontendURL}/index.html`);
         });
