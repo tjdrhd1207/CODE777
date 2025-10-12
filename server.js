@@ -30,9 +30,12 @@ io.on('connection', socket => console.log('🔥 새 연결:', socket.id));
 setupSocket(io); // socket관련 설정 모듈
 // let db;
 
-const uri = "mongodb+srv://jaemin:hansol@cluster0.3lo3bxi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const client = new MongoClient(uri);
-
+const uri = "mongodb+srv://jaemin:hansol@cluster0.3lo3bxi.mongodb.net/game?retryWrites=true&w=majority&appName=Cluster0";
+const client = new MongoClient(uri, {
+  tls: true,
+  tlsAllowInvalidCertificates: true,
+  serverSelectionTimeoutMS: 10000,
+});
 
 app.use(cors({
     origin: frontendURL,

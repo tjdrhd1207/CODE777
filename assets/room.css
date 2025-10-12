@@ -192,3 +192,7 @@ td {
         border-radius: 8px;
     }
 }
+
+.currentTr {
+    color : #ddf5e3;
+}

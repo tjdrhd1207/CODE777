@@ -42,11 +42,21 @@ export default function roomSocketHandler(io, socket) {
     });
 
     socket.on("playerReady", ({ roomId, userId }) => {
-        console.log("준비 이벤트 받음", roomId, userId);
-        readyStates[roomId][userId] = true;
+        console.log("플레이어 준비 토글 요청:", roomId, userId);
+
+        // roomId 초기화
+        if (!readyStates[roomId]) {
+            readyStates[roomId] = {};
+        }
+
+        // 현재 상태를 반전
+        const current = readyStates[roomId][userId] || false;
+        const newState = !current;
+        readyStates[roomId][userId] = newState;
+        // readyStates[roomId][userId] = true;
 
         // 해당 방에 준비 상태 업데이트
-        io.to(roomId).emit("updateReadyState", { userId, ready: true });
+        io.to(roomId).emit("updateReadyState", { userId, ready: newState });
     });
 
     socket.on("disconnect", () => {
@@ -60,5 +70,13 @@ export default function roomSocketHandler(io, socket) {
 
             io.to(roomId).emit('updateParticipants', { roomId, participants: rooms[roomId] });
         }
+    });
+
+    
+    socket.on("startGame", ({ roomId, userId }) => {
+        console.log(`${userId}가 게임 시작 요청`);
+
+        // 해당 방 전체 클라이언트에 게임 시작 이벤트 전송
+        io.to(roomId).emit("startGame", { roomId });
     })
 }
