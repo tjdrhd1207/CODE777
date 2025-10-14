@@ -1,7 +1,8 @@
-import Board from "../ui/board.js";
-import QuestionDeck from "../logic/QuestionDeck.js";   // 또는 CardDeck.js
-import Card from "../model/Card.js";
-import { arrayHasElement } from "../../utils/utils.js";
+import Board from "/game/board.js";
+import QuestionDeck from "/game/model/QuestionDeck.js";   // 또는 CardDeck.js
+import { CardDeck } from "/game/logic/CardDeck.js";
+import { generateDeck } from "/game/logic/cardFactory.js";
+// import { arrayHasElement } from "../../utils/utils.js";
 import {
   animateShuffle,
   hintDeckDrawSetting,
@@ -10,17 +11,22 @@ import {
   animateDeal,
   deckAnswerSetting,
   retrieveAnimation
-} from "../logic/animation.js";
+} from "/game/logic/animation.js";
 
 class Game {
+
     constructor(players) {
         this.players = players;
         this.previousTurn = 0;
         this.currentTurn = 0;
         this.board = new Board();
         this.questionDeck = new QuestionDeck();
-        this.cardDeck = new Card();
-        this.cardDeck.cardSetting();
+        // const allCards = Card.CARD_INFO.map(info => new Card(info));
+        // console.log(allCards);
+        const deckArray = generateDeck();
+        console.log(deckArray);
+        this.cardDeck = new CardDeck(deckArray);
+        // this.cardDeck.cardSetting();
     }
 
     shuffleQuestionDeck() {
@@ -52,7 +58,7 @@ class Game {
         player.deal(this.cardDeck.card);
     }
 
-    /* start() {
+    start() {
         // TODO
         // 스타트 시에 이전의 정보는 다 리셋되어야 할 것 같음
         // 스타트를 계속하면 더 추가가 됨
@@ -65,7 +71,8 @@ class Game {
         this.previousTurn = this.currentTurn;
 
         // 알고리즘 덱 셔플
-        this.deck.shuffle();
+        console.log(this.cardDeck);
+        // this.deck.shuffle();
         // 애니메이션 덱 셔플
         animateShuffle().then(() => {
             for (let i = 0; i < this.players.length; i++) {
@@ -81,7 +88,7 @@ class Game {
         });
 
         // 플레이어별 카드 나눠받기
-    } */
+    }
 
     nextTurn() {
         const previousNameTag = document.querySelector(`.${this.players[this.previousTurn].name}`);

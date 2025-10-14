@@ -1,4 +1,4 @@
-import { CARD_INFO } from "../model/Card";
+import Card from "/game/model/Card.js";
 
 export class CardDeck {
     constructor(cards) {
@@ -29,12 +29,11 @@ export class CardDeck {
     dealCards() {
         console.log(this.cards);
         return this.cards;
-  
     }
 
     getAllCardValues() {
         const cardSet = new Set();
-        CARD_INFO.forEach((card) => {
+        Card.CARD_INFO.forEach((card) => {
             cardSet.add(card.value);
         });
 

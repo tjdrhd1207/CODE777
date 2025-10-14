@@ -25,16 +25,16 @@ async function router() {
 
         // 페이지별 JS 초기화 호출
         if (path === '/') {
-            const module = await import('./scripts/main.js');
+            const module = await import('/scripts/main.js');
             module.initMainPage();
         } else if (path === '/lobby') {
-            const module = await import('./scripts/lobby.js');
+            const module = await import('/scripts/lobby.js');
             module.initLobbyPage();
         } else if (path === '/roomList') {
-            const module = await import('./scripts/roomList.js');
+            const module = await import('/scripts/roomList.js');
             module.initRoomListPage();
         } else if (path === '/game') {
-            const module = await import('./scripts/gamePage.js');
+            const module = await import('/scripts/gamePage.js');
             module.initGamePage();
         }
     } else {

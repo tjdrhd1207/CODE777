@@ -188,9 +188,12 @@ export async function initLobbyPage() {
     });
 
     // 서버에서 startGame 이벤트를 받으면 페이지 이동
-    socket.on("startGame", ({ roomId }) => {
+    socket.on("startGame", ({ roomId, players }) => {
         // 브라우저에서 location.hash 변경 → router.js에서 페이지 로드
         location.hash = "/game";
+
+        localStorage.setItem("roomId", roomId);
+        localStorage.setItem("players", JSON.stringify(players));
     });
 }
 

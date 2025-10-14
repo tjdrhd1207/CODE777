@@ -64,6 +64,10 @@ const __dirname = dirname(__filename);
 
 app.use(express.static(path.join(__dirname)));
 
+app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
+app.use('/game', express.static(path.join(__dirname, 'game')));
+app.use('/pages', express.static(path.join(__dirname, 'pages')));
+
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "CODE777", "index.html"));
 })

@@ -8,7 +8,7 @@ const BLUE = 'BLUE';
 const ASSETS_PATH = 'assets';
 
 class Card {
-    CARD_INFO = [
+    static CARD_INFO = [
         {value: 1, color: GREEN, src: `${ASSETS_PATH}/1_green.svg`},
         {value: 2, color: YELLOW, src: `${ASSETS_PATH}/2_yellow.svg`},
         {value: 3, color: BLACK, src: `${ASSETS_PATH}/3_black.svg`},
@@ -22,7 +22,7 @@ class Card {
         {value: 7, color: BLUE, src: `${ASSETS_PATH}/7_blue.svg`},
     ];
 
-    CARD_COUNTS = {
+    static CARD_COUNTS = {
         "1_GREEN": 1,
         "2_YELLOW": 2,
         "3_BLACK": 3,
@@ -35,7 +35,6 @@ class Card {
         "7_PINK": 1,
         "7_BLUE": 4
     }
-
 }
 
 export default Card;

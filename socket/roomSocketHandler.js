@@ -76,7 +76,14 @@ export default function roomSocketHandler(io, socket) {
     socket.on("startGame", ({ roomId, userId }) => {
         console.log(`${userId}가 게임 시작 요청`);
 
+        const players = rooms[roomId];
+        console.log(players);
+        if (!players) return;
+
         // 해당 방 전체 클라이언트에 게임 시작 이벤트 전송
-        io.to(roomId).emit("startGame", { roomId });
-    })
+        io.to(roomId).emit("startGame", { 
+            roomId,
+            players: players
+        });
+    });
 }

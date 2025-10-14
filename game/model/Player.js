@@ -1,5 +1,3 @@
-import Card from './game/card.js';
-
 class Player {
     constructor(name, id) {
         this.name = name;
