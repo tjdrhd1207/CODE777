@@ -1,4 +1,4 @@
-import Card from "/game/model/Card.js";
+import Card from "../model/Card.js";
 
 export function generateDeck() {
   const deck = [];

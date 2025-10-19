@@ -1,6 +1,6 @@
-import Card from "/game/model/Card.js";
+import Card from "../model/Card.js";
 
-export class CardDeck {
+class CardDeck {
     constructor(cards) {
         this.cards = [...cards];
     }
@@ -40,3 +40,5 @@ export class CardDeck {
         return cardSet;
     }
 }
+
+export default CardDeck;

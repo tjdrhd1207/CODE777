@@ -1,3 +1,4 @@
+import gameSocketHandler from './gameSocketHandler.js';
 import roomSocketHandler from './roomSocketHandler.js';
 
 export default function setupSocket(io) {
@@ -7,6 +8,7 @@ export default function setupSocket(io) {
 
         // 핸들러 리스트
         roomSocketHandler(io, socket);
+        gameSocketHandler(io, socket);
     });
 
     io.on('disconnect', (socket) => {

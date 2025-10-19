@@ -1,6 +1,4 @@
-// roomSocketHandler.js
-const rooms = {};      // roomId별 참가자 리스트
-const readyStates = {}; // roomId별 준비 상태
+import { rooms, readyStates } from './room.js';
 
 export default function roomSocketHandler(io, socket) {
     socket.on('joinRoom', ({ roomId, userId }) => {

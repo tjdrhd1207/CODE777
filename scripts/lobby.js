@@ -1,10 +1,11 @@
 import { checkLoginOrRedirect } from "../frontend/auth/auth.js";
 // import { io } from "socket.io-client";
+import { socket } from "../socket/socket.js"; 
 
 let BACKEND_URL = "http://localhost:3030";
 
 export async function initLobbyPage() {
-    const socket = io(BACKEND_URL); // 서버 주소
+    // const socket = io(BACKEND_URL); // 서버 주소
 
     console.log("🟢 소켓 객체:", socket); // ✅ 소켓 객체 확인
 
@@ -194,6 +195,7 @@ export async function initLobbyPage() {
 
         localStorage.setItem("roomId", roomId);
         localStorage.setItem("players", JSON.stringify(players));
+        localStorage.setItem("currentUserId", currentUserId);
     });
 }
 

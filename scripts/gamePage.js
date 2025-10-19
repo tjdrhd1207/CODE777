@@ -1,14 +1,20 @@
 import Player from "/game/model/Player.js";
 import Game from "/game/Game.js";
 // import { animateDeal, showAnswerField, checkAnswer } from "../game/logic/animation.js";
+import { socket } from "../socket/socket.js";
+
+let BACKEND_URL = "http://localhost:3030";
 
 export async function initGamePage() {
-
+    // const socket = io(BACKEND_URL); // 서버 주소
+    const currentUserId = localStorage.getItem("currentUserId");
     const roomId = localStorage.getItem("roomId");
     const rawPlayers = JSON.parse(localStorage.getItem("players") || "[]");
-    const players = rawPlayers.map((name, index) => {
+    const humanPlayers = rawPlayers.map((name, index) => {
         return new Player(name, index);
     });
+    const helperPlayer = new Player("NPC", humanPlayers.length);
+    const players = [...humanPlayers, helperPlayer];
 
     console.log("현재 방 : " + roomId);
     console.log("참여자 : " + players);
@@ -20,20 +26,13 @@ export async function initGamePage() {
     const attemptAnswerBtn = document.querySelector(".attempt-answer-button");
     const submiAnswerBtn = document.querySelector(".submit-answer");
 
-    // const player1 = new Player("나", 0);
-    // const player2 = new Player("용준", 1);
-    // const player3 = new Player("동준", 2);
-    // const player4 = new Player("호용", 3);
-
-    // const game = new Game([player1, player2, player3, player4]);
-
     shuffleBtn.addEventListener("click", () => {
-        game.start();
+        console.log("게임 시작 클릭");
+        socket.emit("startGameAndShuffle", { roomId, players });
     });
 
     attemptAnswerBtn.addEventListener("click", () => {
         showAnswerField();
-        ;
     });
 
     nextTurn.addEventListener("click", () => {
@@ -47,5 +46,9 @@ export async function initGamePage() {
         // 세개의 값을 적고 제출했는지 체크
         game.submitAnswer(player1, submitArray);
     });
+
+    socket.on("gameStarted", ({ distributedCards }) => {
+        game.start(distributedCards); // start 함수에서 hand 기반으로 animateDeal 실행
+    })
 }
 

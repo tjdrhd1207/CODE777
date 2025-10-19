@@ -93,6 +93,8 @@ export function animateDeal(card, players, elements) {
             
             const imgTag = document.createElement("img");
             const imgBack = document.createElement("img");
+            console.log(players[j]);
+            console.log(players[j].hand[i].src);
             imgTag.setAttribute("src", players[j].hand[i].src);
 
             imgBack.setAttribute("src", "assets/back-card.png");
