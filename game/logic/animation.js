@@ -50,7 +50,7 @@ export function hintDeckDrawSetting(drawedDeck) {
     deck.innerHTML += drawedDeck.question;
 }
 
-export function animateDeal(card, players, elements) {
+export function animateDeal(card, players, currentUserId) {
     console.log('실행');
     const directions = ["위", "오른쪽", "왼쪽", "아래"];
     const startTime = 3500;
@@ -68,11 +68,11 @@ export function animateDeal(card, players, elements) {
         const cardContainer = document.createElement("div");
         cardContainer.classList.add("card-container");
 
-        playerNameTag.innerHTML = players[i].name;
+        playerNameTag.innerHTML = players[i].userId;
         playerDiv.classList.add("div-alignment");
-        playerDiv.classList.add(players[i].name);
-        playerDiv.classList.add(`player-${players[i].id}`);
-        playerDiv.dataset.playerId = players[i].id;
+        playerDiv.classList.add(players[i].userId);
+        playerDiv.classList.add(`player-${players[i].userId}`);
+        playerDiv.dataset.playerId = players[i].userId;
         playerNameTag.classList.add('name-font');
         playerDiv.appendChild(playerNameTag);
         playerDiv.appendChild(cardContainer);
@@ -93,12 +93,21 @@ export function animateDeal(card, players, elements) {
             
             const imgTag = document.createElement("img");
             const imgBack = document.createElement("img");
-            console.log(players[j]);
+            
+            /* console.log(players[j]);
             console.log(players[j].hand[i].src);
             imgTag.setAttribute("src", players[j].hand[i].src);
 
             imgBack.setAttribute("src", "assets/back-card.png");
-            imgBack.classList.add("card-back");
+            imgBack.classList.add("card-back"); */
+
+            // 자기 자신일 경우, 앞면 숨기기
+            if (players[j].userId === currentUserId) {
+                imgTag.setAttribute("src", "assets/back-card.png");
+                imgTag.classList.add("card-back");
+            } else {
+                imgTag.setAttribute("src", players[j].hand[i].src);
+            }
 
             imgDiv.appendChild(imgTag);
             imgDiv.appendChild(imgBack);

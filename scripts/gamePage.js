@@ -48,7 +48,7 @@ export async function initGamePage() {
     });
 
     socket.on("gameStarted", ({ distributedCards }) => {
-        game.start(distributedCards); // start 함수에서 hand 기반으로 animateDeal 실행
+        game.start(distributedCards, currentUserId); // start 함수에서 hand 기반으로 animateDeal 실행
     })
 }
 

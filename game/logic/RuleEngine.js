@@ -9,7 +9,7 @@ const BLUE = 'BLUE';
 
 // 질문에 채점
 export function correctAnswer(question) {
-    this.question = question;
+    // this.question = question;
     switch (question.seq) {
         // 숫자의 합이 18 이상인 선반은 몇 개입니까?
         case 1: {
@@ -411,3 +411,26 @@ export function correctAnswer(question) {
         }
     }
 }
+
+function showMoreColor(color1, color2, color1Name, color2Name) {
+        let pedestal;
+        let color1Count = 0;
+        let color2Count = 0;
+
+        this.players.forEach((player) => {
+            /* 현재턴이 아닌 사람들 중 */
+            if (player.id !== this.players[this.currentTurn].id) {
+
+                player.hand.forEach((card) => {
+                    if (card.color === color1) {
+                        color1Count += 1;
+                    } else if (card.color === color2) {
+                        color2Count += 1;
+                    }
+                });
+            }
+        })
+        pedestal = (color1Count > color2Count) ? color1Name : (color1Count === color2Count ? '더 많이 보이지 않습니다.' : color2Name);
+
+        return pedestal;
+    }

@@ -12,6 +12,7 @@ import {
     deckAnswerSetting,
     retrieveAnimation
 } from "/game/logic/animation.js";
+import { correctAnswer } from "/game/logic/RuleEngine.js";
 
 class Game {
 
@@ -58,14 +59,14 @@ class Game {
         player.deal(this.cardDeck.card);
     }
 
-    start(distributedCards) {
+    start(distributedCards, currentUserId) {
         // TODO
         // 스타트 시에 이전의 정보는 다 리셋되어야 할 것 같음
         // 스타트를 계속하면 더 추가가 됨
 
         console.log("--Game Start--");
         const boardCenter = document.querySelector(".board-center");
-        let playerDivs = [];
+        // let playerDivs = [];
         hintDeckInitSetting(boardCenter);
         this.previousTurn = this.currentTurn;
         console.log(distributedCards);
@@ -77,7 +78,7 @@ class Game {
         animateShuffle().then(() => {
 
             console.log(this.players);
-            animateDeal(this.cardDeck.cards, this.players, playerDivs);
+            animateDeal(this.cardDeck.cards, this.players, currentUserId);
 
             this.nextTurn();
         });
@@ -102,30 +103,53 @@ class Game {
     }
 
     nextTurn() {
-        const previousNameTag = document.querySelector(`.${this.players[this.previousTurn].name}`);
-        const previousImgTag = previousNameTag.querySelector(".hand");
-        if (previousImgTag) {
-            previousNameTag.removeChild(previousImgTag);
+        const previousNameTag = document.querySelector(`.${this.players[this.previousTurn].userId}`);
+        const previousHandRow = previousNameTag.querySelector(".name-hand-row");
+        if (previousHandRow) {
+            const previousImgTag = previousHandRow.querySelector(".hand");
+            if (previousImgTag) {
+                previousHandRow.removeChild(previousImgTag);
+            }
         }
 
         this.currentTurn = (this.currentTurn + 1) % this.players.length;
         this.previousTurn = this.currentTurn;
 
-        const nameTag = document.querySelector(`.${this.players[this.currentTurn].name}`);
-        const turnImg = document.createElement("img");
+        const playerDiv = document.querySelector(`.${this.players[this.currentTurn].userId}`);
+        let nameHandRow = playerDiv.querySelector(".name-hand-row");
 
-        turnImg.classList.add("hand");
+        // name-hand-row가 없으면 새로 생성
+        if (!nameHandRow) {
+            nameHandRow = document.createElement("div");
+            nameHandRow.classList.add("name-hand-row");
+            nameHandRow.style.display = "flex";
+            nameHandRow.style.alignItems = "center";
+            nameHandRow.style.flexDirection = "row";
+
+            const nameFont = playerDiv.querySelector(".name-font");
+            if (nameFont) {
+                // 기존 name-font를 row 안으로 이동
+                nameHandRow.appendChild(nameFont);
+            }
+
+            //card-container보다 위에 추가
+            const cardContainer = playerDiv.querySelector(".card-container");
+            playerDiv.insertBefore(nameHandRow, cardContainer);
+        }
+
+        const turnImg = document.createElement("img");
+        turnImg.classList.add("hand-image");
         turnImg.setAttribute("src", 'assets/hand-icon2.png');
-        nameTag.appendChild(turnImg);
+        nameHandRow.appendChild(turnImg);
 
         console.log(`오레노 턴 : Player ${this.currentTurn + 1}`);
         console.log(this.getCurrentPlayer().name);
 
         // 질문덱에서 질문 뽑기
-        const drawedDeck = this.questionDeck.draw();
+        const drawedDeck = this.questionDeck.draw();    
         hintDeckDrawSetting(drawedDeck, this.questionDeck);
 
-        this.answer = this.correctAnswer(drawedDeck);
+        this.answer = correctAnswer(drawedDeck);
         deckAnswerSetting(this.answer);
     }
 
@@ -137,28 +161,7 @@ class Game {
 
 
 
-    showMoreColor(color1, color2, color1Name, color2Name) {
-        let pedestal;
-        let color1Count = 0;
-        let color2Count = 0;
-
-        this.players.forEach((player) => {
-            /* 현재턴이 아닌 사람들 중 */
-            if (player.id !== this.players[this.currentTurn].id) {
-
-                player.hand.forEach((card) => {
-                    if (card.color === color1) {
-                        color1Count += 1;
-                    } else if (card.color === color2) {
-                        color2Count += 1;
-                    }
-                });
-            }
-        })
-        pedestal = (color1Count > color2Count) ? color1Name : (color1Count === color2Count ? '더 많이 보이지 않습니다.' : color2Name);
-
-        return pedestal;
-    }
+    
 
 }
 
