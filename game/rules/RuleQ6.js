@@ -1,4 +1,4 @@
-import QuestionRule from "./QuestionRule";
+import QuestionRule from "./QuestionRule.js";
 
 // 색깔과 숫자 모두 완전히 같은 타일이 있는 받침대는 몇 개입니까?
 export default class RuleQ6 extends QuestionRule {

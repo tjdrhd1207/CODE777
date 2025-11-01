@@ -1,4 +1,4 @@
-import QuestionRule from "./QuestionRule";
+import QuestionRule from "./QuestionRule.js";
 
 export default class RuleQ2 extends QuestionRule {
     evaluate(players, currentTurn) {

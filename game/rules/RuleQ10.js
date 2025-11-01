@@ -1,4 +1,4 @@
-import QuestionRule from "./QuestionRule";
+import QuestionRule from "./QuestionRule.js";
 
 // 하나도 보이지 않는 숫자는 몇 개입니까?
 export default class RuleQ10 extends QuestionRule {

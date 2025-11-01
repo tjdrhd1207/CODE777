@@ -1,4 +1,4 @@
-import QuestionRule from "./QuestionRule";
+import QuestionRule from "./QuestionRule.js";
 
 // 몇 가지 색깔이 보입니까?
 export default class RuleQ9 extends QuestionRule {

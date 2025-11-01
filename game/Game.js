@@ -2,7 +2,6 @@ import Board from "/game/board.js";
 import QuestionDeck from "/game/model/QuestionDeck.js";   // 또는 CardDeck.js
 import CardDeck from "/game/logic/CardDeck.js";
 import { generateDeck } from "/game/logic/cardFactory.js";
-// import { arrayHasElement } from "../../utils/utils.js";
 import {
     animateShuffle,
     hintDeckDrawSetting,
@@ -12,7 +11,7 @@ import {
     deckAnswerSetting,
     retrieveAnimation
 } from "/game/logic/animation.js";
-import { correctAnswer } from "/game/logic/RuleEngine.js";
+import RuleEngine from "./rules/RuleEngine.js";
 
 class Game {
 
@@ -20,18 +19,31 @@ class Game {
         this.players = players;
         this.previousTurn = 0;
         this.currentTurn = 0;
+        this.answer = "";
         this.board = new Board();
         this.questionDeck = new QuestionDeck();
-        // const allCards = Card.CARD_INFO.map(info => new Card(info));
-        // console.log(allCards);
         const deckArray = generateDeck();
-        console.log(deckArray);
         this.cardDeck = new CardDeck(deckArray);
         // this.cardDeck.cardSetting();
     }
 
     shuffleQuestionDeck() {
         this.questionDeck.shuffle();
+    }
+
+    // 현재턴 세팅
+    setCurrentTurn(currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+
+    // 정답 세팅
+    setAnswer(answer) {
+        this.answer = answer;
+    }
+
+    // 질문
+    showQuestion(question) {
+        this.questionDeck = question;
     }
 
     //현재 플레이어
@@ -82,40 +94,40 @@ class Game {
 
             this.nextTurn();
         });
-        // 카드덱 셔플 - 실제 로직상 셔플
-        // console.log(this.cardDeck);
-        // this.cardDeck.shuffle();
-        /* this.cardDeck.cards = initialCards;
-        animateShuffle().then(() => {
-            for (let i = 0; i < this.players.length; i++) {
-                const player = this.players[i];
-                player.deal(this.cardDeck.cards);
-            }
-            console.log(this.cardDeck.cards);
-            animateDeal(this.cardDeck.cards, this.players, playerDivs);
-    
-            // 다음턴으로 이동
-            this.nextTurn();
-    
-        }); */
-
-        // 플레이어별 카드 나눠받기
     }
 
     nextTurn() {
-        const previousNameTag = document.querySelector(`.${this.players[this.previousTurn].userId}`);
-        const previousHandRow = previousNameTag.querySelector(".name-hand-row");
-        if (previousHandRow) {
-            const previousImgTag = previousHandRow.querySelector(".hand");
-            if (previousImgTag) {
-                previousHandRow.removeChild(previousImgTag);
+        // 1. 턴 갱신
+        // this.currentTurn = (this.currentTurn + 1) % this.players.length;
+        this.previousTurn = (this.currentTurn - 1) % this.players.length;
+
+        // 질문덱에서 질문 뽑기
+        const drawedDeck = this.questionDeck.draw();
+        console.log(this.questionDeck);
+        console.log(drawedDeck);
+        hintDeckDrawSetting(drawedDeck);
+        const ruleEngine = new RuleEngine(this.cardDeck);
+        this.answer = ruleEngine.evaluate(drawedDeck.seq, this.players, this.currentTurn);
+        deckAnswerSetting(this.answer);
+
+        this.updateTurnUI(this.players, this.previousTurn, this.currentTurn);
+    }
+
+    updateTurnUI(players, previousTurn, currentTurn) {
+        console.log(players);
+        console.log(previousTurn);
+        if (previousTurn >= 0) {
+            const previousNameTag = document.querySelector(`.${players[previousTurn].userId}`);
+            const previousHandRow = previousNameTag.querySelector(".name-hand-row");
+            if (previousHandRow) {
+                const previousImgTag = previousHandRow.querySelector(".hand");
+                if (previousImgTag) {
+                    previousHandRow.removeChild(previousImgTag);
+                }
             }
         }
 
-        this.currentTurn = (this.currentTurn + 1) % this.players.length;
-        this.previousTurn = this.currentTurn;
-
-        const playerDiv = document.querySelector(`.${this.players[this.currentTurn].userId}`);
+        const playerDiv = document.querySelector(`.${players[currentTurn].userId}`);
         let nameHandRow = playerDiv.querySelector(".name-hand-row");
 
         // name-hand-row가 없으면 새로 생성
@@ -141,16 +153,6 @@ class Game {
         turnImg.classList.add("hand-image");
         turnImg.setAttribute("src", 'assets/hand-icon2.png');
         nameHandRow.appendChild(turnImg);
-
-        console.log(`오레노 턴 : Player ${this.currentTurn + 1}`);
-        console.log(this.getCurrentPlayer().name);
-
-        // 질문덱에서 질문 뽑기
-        const drawedDeck = this.questionDeck.draw();    
-        hintDeckDrawSetting(drawedDeck, this.questionDeck);
-
-        this.answer = correctAnswer(drawedDeck);
-        deckAnswerSetting(this.answer);
     }
 
     getCurrentPlayer() {

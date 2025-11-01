@@ -1,4 +1,4 @@
-import QuestionRule from "./QuestionRule";
+import QuestionRule from "./QuestionRule.js";
 
 // 파랑 7과 다른 색깔 7 중에서 어느 것이 더 많이 보입니까?
 export default class RuleQ16 extends QuestionRule {

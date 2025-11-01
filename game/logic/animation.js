@@ -42,7 +42,6 @@ export function hintDeckInitSetting(board) {
 }
 
 export function hintDeckDrawSetting(drawedDeck) {
-    console.log(drawedDeck);
     const deck = document.querySelector(".deck");
     deck.innerHTML = "";
     deck.innerHTML += `<span style="font-size: 1.5rem; font-weight: bold">${drawedDeck.seq}</span>`;

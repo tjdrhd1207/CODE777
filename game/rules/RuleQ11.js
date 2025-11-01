@@ -1,4 +1,4 @@
-import QuestionRule from "./QuestionRule";
+import QuestionRule from "./QuestionRule.js";
 
 // 녹색 1, 검정 5, 분홍 7이 총 몇개 보입니까?
 export default class RuleQ11 extends QuestionRule {

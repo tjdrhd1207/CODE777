@@ -1,4 +1,4 @@
-import QuestionRule from "./QuestionRule";
+import QuestionRule from "./QuestionRule.js";
 
 // 3개의 타일이 연속된 숫자인 받침대는 몇 개입니까?
 export default class RuleQ7 extends QuestionRule {
