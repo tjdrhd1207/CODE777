@@ -43,12 +43,17 @@ class Game {
 
     // 질문
     showQuestion(question) {
-        this.questionDeck = question;
+        this.questionDeck.nowQuestion = question;
     }
 
     //현재 플레이어
     getCurrentPlayer() {
         return this.players[this.currentTurn];
+    }
+
+    
+    getCurrentTurn() {
+        return this.currentTurn;
     }
 
     drawQuestionCard() {
@@ -98,24 +103,23 @@ class Game {
 
     nextTurn() {
         // 1. 턴 갱신
-        // this.currentTurn = (this.currentTurn + 1) % this.players.length;
         this.previousTurn = (this.currentTurn - 1) % this.players.length;
-
+        this.currentTurn = (this.currentTurn + 1) % this.players.length;
         // 질문덱에서 질문 뽑기
-        const drawedDeck = this.questionDeck.draw();
-        console.log(this.questionDeck);
-        console.log(drawedDeck);
-        hintDeckDrawSetting(drawedDeck);
+        const drawedDeck = this.drawQuestionCard();
         const ruleEngine = new RuleEngine(this.cardDeck);
         this.answer = ruleEngine.evaluate(drawedDeck.seq, this.players, this.currentTurn);
+
+        hintDeckDrawSetting(drawedDeck);
         deckAnswerSetting(this.answer);
 
-        this.updateTurnUI(this.players, this.previousTurn, this.currentTurn);
+        // this.updateTurnUI(this.players, this.previousTurn);
     }
 
-    updateTurnUI(players, previousTurn, currentTurn) {
+    updateTurnUI(players, previousTurn) {
         console.log(players);
         console.log(previousTurn);
+        console.log(this.currentTurn);
         if (previousTurn >= 0) {
             const previousNameTag = document.querySelector(`.${players[previousTurn].userId}`);
             const previousHandRow = previousNameTag.querySelector(".name-hand-row");
@@ -127,7 +131,7 @@ class Game {
             }
         }
 
-        const playerDiv = document.querySelector(`.${players[currentTurn].userId}`);
+        const playerDiv = document.querySelector(`.${players[this.currentTurn].userId}`);
         let nameHandRow = playerDiv.querySelector(".name-hand-row");
 
         // name-hand-row가 없으면 새로 생성
@@ -154,16 +158,6 @@ class Game {
         turnImg.setAttribute("src", 'assets/hand-icon2.png');
         nameHandRow.appendChild(turnImg);
     }
-
-    getCurrentPlayer() {
-        return this.players[this.currentTurn];
-    }
-
-
-
-
-
-    
 
 }
 

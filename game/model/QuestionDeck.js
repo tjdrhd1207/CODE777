@@ -25,13 +25,15 @@ class QuestionDeck {
             { seq: 22, question: '검정과 빨강 중에서 어느 것이 더 많이 보입니까?' },
             { seq: 23, question: '녹색과 노랑 중에서 어느 것이 더 많이 보입니까?' },
         ];
+        this.nowQuestion = null;
     }
 
     draw() {
         // 덱을 드로우 함
         // 덱 뭉치에서 하나 꺼냄
-        const deck = this.deckCards.pop();
-        return deck;
+        const drawedQuestion = this.deckCards.pop();
+        this.nowQuestion = drawedQuestion;
+        return drawedQuestion;
     }
 
     question(deckCard) {

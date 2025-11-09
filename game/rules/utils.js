@@ -8,9 +8,6 @@ export function showMoreColor(players, currentTurn, color1, color2, color1Name, 
     players.forEach(player => {
         if (player.userId !== players[currentTurn].userId) {
             player.hand.forEach(card => {
-                console.log("카드.칼라 : " + card.color);
-                console.log("color1 : " + color1);
-                console.log("color2 : " + color2);
                 if (card.color === color1) count1++;
                 else if (card.color === color2) count2++;
             });
