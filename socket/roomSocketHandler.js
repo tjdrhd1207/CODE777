@@ -61,9 +61,8 @@ export default function roomSocketHandler(io, socket) {
                 currentTurn: 0,
                 previousTurn: null,
                 gameStarted: false,
-                cardDeck: null,
-                questionDeck: null,
-                question: null,
+                cardDeck: new CardDeck(),
+                questionDeck: new QuestionDeck(),
                 answer: null
             };
         }
@@ -90,7 +89,7 @@ export default function roomSocketHandler(io, socket) {
         rooms[roomId].players = rooms[roomId].players.filter(id => id !== userId);
 
         // ready 상태 제거
-        delete rooms[roomId].ready[userId];        
+        delete rooms[roomId].ready[userId];
 
         io.to(roomId).emit('updateParticipants', { roomId, participants: rooms[roomId].players });
     });
@@ -103,6 +102,14 @@ export default function roomSocketHandler(io, socket) {
         room.currentTurn = 0;
         room.previousTurn = room.players.length - 1;
         room.gameStarted = true;
+
+        room.cardDeck = new CardDeck(generateDeck());
+        room.cardDeck.shuffle();
+
+        room.questionDeck = new QuestionDeck();
+        room.questionDeck.shuffle(); // ⭐ 꼭 섞기
+
+        room.answer = null;
 
         // 해당 방 전체 클라이언트에 게임 시작 이벤트 전송
         io.to(roomId).emit("startGame", {
