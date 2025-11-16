@@ -2,6 +2,10 @@ import Player from "/game/model/Player.js";
 import Game from "/game/Game.js";
 // import { animateDeal, showAnswerField, checkAnswer } from "../game/logic/animation.js";
 import { socket } from "../socket/socket.js";
+import RuleEngine from "../game/rules/RuleEngine.js";
+import { generateDeck } from "../game/logic/cardFactory.js";
+import QuestionDeck from "../game/model/QuestionDeck.js";
+import CardDeck from "../game/logic/CardDeck.js";
 
 let BACKEND_URL = "http://localhost:3030";
 
@@ -28,7 +32,7 @@ export async function initGamePage() {
 
     shuffleBtn.addEventListener("click", () => {
         console.log("게임 시작 클릭");
-        socket.emit("startGameAndShuffle", { roomId, players });
+        socket.emit("startGameAndShuffle", { roomId });
     });
 
     attemptAnswerBtn.addEventListener("click", () => {
@@ -37,17 +41,8 @@ export async function initGamePage() {
 
     nextTurn.addEventListener("click", ( ) => {
         console.log("다음턴 실행");
-        game.nextTurn();
-
-        const cardDeck = game.cardDeck;
-        const questionDeck = game.questionDeck;
-        const currentTurn = game.getCurrentTurn();
         socket.emit("nextTurn", { 
-            roomId,
-            currentTurn,
-            players,
-            cardDeck,
-            questionDeck: questionDeck.deckCards
+            roomId
         });
     })
 
@@ -60,15 +55,22 @@ export async function initGamePage() {
     });
 
     socket.on("gameStarted", ({ distributedCards }) => {
-        game.start(distributedCards, currentUserId); // start 함수에서 hand 기반으로 animateDeal 실행
+        // distributedCards → player.hand 세팅
+        game.players.forEach(player => {
+            player.hand = distributedCards[player.userId] || [];
+        });
+
+        game.start(distributedCards, currentUserId ); // start 함수에서 hand 기반으로 animateDeal 실행
     });
 
-    socket.on("turnChanged", ({ currentTurn, currentPlayer, questionDeck, answer }) => {
-        console.log(`🔁 턴 변경 - 현재턴: ${currentPlayer.userId}`);
-        console.log(questionDeck);
+    socket.on("turnChanged", ({ currentTurn, currentPlayer, question, answer }) => {
+        console.log(`🔁 턴 변경 - 현재턴: ${currentPlayer}`);
+        console.log(question);
+        console.log(answer);
+
         game.setCurrentTurn(currentTurn);
         game.setAnswer(answer);
-        game.showQuestion(questionDeck.question);
-        game.updateTurnUI(players, currentTurn);
+        game.showQuestion(question);
+        game.updateTurnUI(players, question, answer);
     });
 }

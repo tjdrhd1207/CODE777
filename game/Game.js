@@ -22,6 +22,7 @@ class Game {
         this.answer = "";
         this.board = new Board();
         this.questionDeck = new QuestionDeck();
+        this.questionCard = null;
         const deckArray = generateDeck();
         this.cardDeck = new CardDeck(deckArray);
         // this.cardDeck.cardSetting();
@@ -43,6 +44,7 @@ class Game {
 
     // 질문
     showQuestion(question) {
+        console.log(question);
         this.questionDeck.nowQuestion = question;
     }
 
@@ -51,7 +53,6 @@ class Game {
         return this.players[this.currentTurn];
     }
 
-    
     getCurrentTurn() {
         return this.currentTurn;
     }
@@ -83,48 +84,50 @@ class Game {
 
         console.log("--Game Start--");
         const boardCenter = document.querySelector(".board-center");
-        // let playerDivs = [];
+
+        // 이전 카드 제거
+        const existingPlayerDivs = boardCenter.querySelectorAll(".div-alignment");
+        existingPlayerDivs.forEach(div => div.remove());
+
         hintDeckInitSetting(boardCenter);
         this.previousTurn = this.currentTurn;
-        console.log(distributedCards);
+
         this.players.forEach((player) => {
             if (distributedCards[player.userId]) {
                 player.hand = distributedCards[player.userId];
             }
         });
         animateShuffle().then(() => {
-
-            console.log(this.players);
             animateDeal(this.cardDeck.cards, this.players, currentUserId);
 
-            this.nextTurn();
+            // ⭐ 첫 턴 질문/정답 세팅
+            this.questionCard = this.drawQuestionCard();
+            const ruleEngine = new RuleEngine(this.cardDeck);
+            this.answer = ruleEngine.evaluate(this.questionCard.seq, this.players, this.currentTurn);
+
+            this.updateTurnUI(this.players, this.questionCard, this.answer);
         });
     }
 
     nextTurn() {
         // 1. 턴 갱신
-        this.previousTurn = (this.currentTurn - 1) % this.players.length;
-        this.currentTurn = (this.currentTurn + 1) % this.players.length;
+        this.currentTurn = ((this.currentTurn + 1) + this.players.length) % this.players.length;
+        this.previousTurn = ((this.currentTurn - 1) + this.players.length) % this.players.length;
+
         // 질문덱에서 질문 뽑기
-        const drawedDeck = this.drawQuestionCard();
+        this.questionCard = this.drawQuestionCard();
         const ruleEngine = new RuleEngine(this.cardDeck);
-        this.answer = ruleEngine.evaluate(drawedDeck.seq, this.players, this.currentTurn);
-
-        hintDeckDrawSetting(drawedDeck);
-        deckAnswerSetting(this.answer);
-
-        // this.updateTurnUI(this.players, this.previousTurn);
+        this.answer = ruleEngine.evaluate(this.questionCard.seq, this.players, this.currentTurn);
     }
 
-    updateTurnUI(players, previousTurn) {
-        console.log(players);
-        console.log(previousTurn);
-        console.log(this.currentTurn);
-        if (previousTurn >= 0) {
-            const previousNameTag = document.querySelector(`.${players[previousTurn].userId}`);
+    updateTurnUI(players, question, answer) {
+        if (this.previousTurn >= 0) {
+            const previousNameTag = document.querySelector(`.${players[this.previousTurn].userId}`);
+            console.log(previousNameTag);
             const previousHandRow = previousNameTag.querySelector(".name-hand-row");
+            console.log(previousHandRow);
             if (previousHandRow) {
-                const previousImgTag = previousHandRow.querySelector(".hand");
+                const previousImgTag = previousHandRow.querySelector(".hand-image");
                 if (previousImgTag) {
                     previousHandRow.removeChild(previousImgTag);
                 }
@@ -157,6 +160,12 @@ class Game {
         turnImg.classList.add("hand-image");
         turnImg.setAttribute("src", 'assets/hand-icon2.png');
         nameHandRow.appendChild(turnImg);
+        console.log("질문");
+        console.log(question);
+        console.log(answer);
+        // question, answer가 있을 때만 호출
+        if (question) hintDeckDrawSetting(question);
+        if (answer) deckAnswerSetting(answer);
     }
 
 }

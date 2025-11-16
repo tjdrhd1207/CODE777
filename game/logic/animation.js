@@ -51,10 +51,8 @@ export function hintDeckDrawSetting(drawedDeck) {
 
 export function animateDeal(card, players, currentUserId) {
     console.log('실행');
-    const directions = ["위", "오른쪽", "왼쪽", "아래"];
+    console.log(players);
     const startTime = 3500;
-    const shortInterval = 400;
-    const longInterval = 830;
     let playerDiv = null;
     let delay = startTime;
     const playerDivs = [];
@@ -93,13 +91,6 @@ export function animateDeal(card, players, currentUserId) {
             const imgTag = document.createElement("img");
             const imgBack = document.createElement("img");
             
-            /* console.log(players[j]);
-            console.log(players[j].hand[i].src);
-            imgTag.setAttribute("src", players[j].hand[i].src);
-
-            imgBack.setAttribute("src", "assets/back-card.png");
-            imgBack.classList.add("card-back"); */
-
             // 자기 자신일 경우, 앞면 숨기기
             if (players[j].userId === currentUserId) {
                 imgTag.setAttribute("src", "assets/back-card.png");

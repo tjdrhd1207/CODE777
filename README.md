@@ -34,3 +34,29 @@ todo: 정답 버튼 눌렀을 때, 현재 숫자선택 버튼들이 나와있고
 턴변경 관련하여 gameSocketHandler, gamePage, QuestionDeck, Game 파일에서 현재
 충돌일어남
 완벽한 정리가 필요함
+
+2025/11/16
+ISSUE
+- 턴넘길 때 턴 표시 모양 안사라짐 
+  Answer. 턴갱신 로직변경 해결
+  - this.currentTurn = ((this.currentTurn + 1) + this.players.length) % this.players.length;
+  - this.previousTurn = ((this.currentTurn - 1) + this.players.length) % this.players.length;
+
+- 대답이 질문에 현재 안맞음
+- A는 턴을 넘겼는데, 나머지 플레이어 화면에선느 안바뀌어있음
+- npc 턴은 패스해야함
+- 11번 문제 이슈
+file:///D:/study/CODE777/game/rules/RuleQ2.js:11
+                const sum = player.hand.reduce((acc, card) => acc + card.value, 0);
+                                        ^
+
+TypeError: Cannot read properties of undefined (reading 'reduce')
+    at file:///D:/study/CODE777/game/rules/RuleQ2.js:11:41
+    at Array.forEach (<anonymous>)
+    at RuleQ2.evaluate (file:///D:/study/CODE777/game/rules/RuleQ2.js:6:17)
+    at RuleEngine.evaluate (file:///D:/study/CODE777/game/rules/RuleEngine.js:58:21)
+    at Socket.<anonymous> (file:///D:/study/CODE777/socket/gameSocketHandler.js:61:35)
+    at Socket.emit (node:events:519:28)
+    at Socket.emitUntyped (D:\study\CODE777\node_modules\socket.io\dist\typed-events.js:69:22)
+    at D:\study\CODE777\node_modules\socket.io\dist\socket.js:697:39
+    at process.processTicksAndRejections (node:internal/process/task_queues:85:11)
