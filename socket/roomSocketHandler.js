@@ -104,19 +104,6 @@ export default function roomSocketHandler(io, socket) {
         room.previousTurn = room.players.length - 1;
         room.gameStarted = true;
 
-        const deckArray = generateDeck();
-        room.cardDeck = new CardDeck(deckArray);
-        room.cardDeck.shuffle();
-        room.questionDeck = new QuestionDeck();
-        room.questionDeck.shuffle();
-        room.question = room.questionDeck.draw(); // draw 시점도 서버에서
-        const ruleEngine = new RuleEngine(room.cardDeck);
-        room.answer = ruleEngine.evaluate(room.question.seq, room.players, room.currentTurn);
-        console.log("-----------");
-        console.log(room.cardDeck);
-        console.log(room.questionDeck);
-        console.log("---------");
-
         // 해당 방 전체 클라이언트에 게임 시작 이벤트 전송
         io.to(roomId).emit("startGame", {
             roomId,
