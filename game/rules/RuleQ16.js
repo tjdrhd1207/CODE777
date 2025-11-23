@@ -9,7 +9,7 @@ export default class RuleQ16 extends QuestionRule {
 
         players.forEach((player) => {
             /* 현재턴이 아닌 사람들 중 */
-            if (player.id !== players[currentTurn].id) {
+            if (player.userId !== players[currentTurn].userId) {
 
                 player.hand.forEach((card) => {
                     if (card.value === 7 && card.color === BLUE) {

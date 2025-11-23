@@ -8,7 +8,7 @@ export default class RuleQ9 extends QuestionRule {
 
         players.forEach((player) => {
             /* 현재턴이 아닌 사람들 중 */
-            if (player.id !== players[currentTurn].id) {
+            if (player.userId !== players[currentTurn].userId) {
 
                 player.hand.forEach((card) => {
                     valueMap.set(card.color, (valueMap.get(card.color) || 0) + 1);

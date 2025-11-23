@@ -6,7 +6,7 @@ export default class RuleQ7 extends QuestionRule {
         let count = 0;
         players.forEach((player) => {
             /* 현재턴이 아닌 사람들 중 */
-            if (player.id !== players[currentTurn].id) {
+            if (player.userId !== players[currentTurn].userId) {
 
                 const sortedCards = [...player.hand].sort((a, b) => a.value - b.value);
 

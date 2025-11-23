@@ -7,6 +7,8 @@ export default class RuleQ2 extends QuestionRule {
             console.log("현재턴");
             console.log(currentTurn);
             console.log(idx);
+            console.log(player);
+            console.log(player.hand);
             if (idx !== currentTurn) {
                 const sum = player.hand.reduce((acc, card) => acc + card.value, 0);
                 if (sum <= 12) count++;

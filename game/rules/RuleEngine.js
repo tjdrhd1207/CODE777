@@ -53,7 +53,8 @@ export default class RuleEngine {
 
     evaluate(questionSeq, players, currentTurn) {
         const rule = this.rules[questionSeq];
-        console.log(currentTurn);
+        console.log("----RuleEngine----");
+        console.log(players);
         if (!rule) return null;
         return rule.evaluate(players, currentTurn, this.cardDeck);
     }

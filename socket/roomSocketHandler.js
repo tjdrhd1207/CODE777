@@ -3,6 +3,7 @@ import { generateDeck } from '../game/logic/cardFactory.js';
 import QuestionDeck from '../game/model/QuestionDeck.js';
 import RuleEngine from '../game/rules/RuleEngine.js';
 import { rooms, readyStates } from './room.js';
+import Player from '../game/model/Player.js';
 
 export default function roomSocketHandler(io, socket) {
     socket.on('joinRoom', ({ roomId, userId }) => {
@@ -18,13 +19,10 @@ export default function roomSocketHandler(io, socket) {
             questionDeck: null,
             answer: null
         };
-
+ 
         const room = rooms[roomId];
-
-        // if (!readyStates[roomId]) readyStates[roomId] = {};
-
-        if (!room.players.includes(userId)) {
-            room.players.push(userId);
+        if (!room.players.find(p => p.userId === userId)) {
+            room.players.push(new Player(userId, room.players.length));
         }
 
         // 유저 준비상태 초기화
@@ -107,8 +105,9 @@ export default function roomSocketHandler(io, socket) {
         room.cardDeck.shuffle();
 
         room.questionDeck = new QuestionDeck();
-        room.questionDeck.shuffle(); // ⭐ 꼭 섞기
-
+        // TEST용으로 주석처리
+        // room.questionDeck.shuffle(); // ⭐ 꼭 섞기
+        console.log(room.players);
         room.answer = null;
 
         // 해당 방 전체 클라이언트에 게임 시작 이벤트 전송

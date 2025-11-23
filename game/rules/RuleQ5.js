@@ -5,7 +5,7 @@ export default class RuleQ5 extends QuestionRule {
         let count = 0;
         players.forEach((player) => {
             /* 현재턴이 아닌 사람들 중 */
-            if (player.id !== players[currentTurn].id) {
+            if (player.userId !== players[currentTurn].userId) {
 
                 let even = 0; // 짝수
                 let odd = 0; // 홀수

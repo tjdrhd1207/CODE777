@@ -1,4 +1,4 @@
-import { CardDeck } from "./CardDeck";
+/* import { CardDeck } from "./CardDeck";
 import { generateDeck } from "./cardFactory";
 
 export class GameController {
@@ -58,7 +58,7 @@ export class GameController {
 
     submitAnswer(player, answer) {
         
-        /* let playerHasAnswer = [];
+        let playerHasAnswer = [];
         player.hand.forEach((hand) => {
             playerHasAnswer.push(hand.value);
         });
@@ -75,7 +75,7 @@ export class GameController {
             player.deal(this.deck); //카드 다시 나누기
             // 카드 나누기 애니메이션
             retrieveAnimation(player.id);
-        } */
+        }
 
         const isCorrect = RuleEngine.compare(answer, this.answer);
 
@@ -85,4 +85,4 @@ export class GameController {
           this.dealCardsTo(player);
         }
     }
-}
+} */

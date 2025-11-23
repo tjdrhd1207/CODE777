@@ -6,7 +6,7 @@ export default class RuleQ1 extends QuestionRule {
         players.forEach((player, idx) => {
             /* 현재턴이 아닌 사람들 중 */
             if (idx !== currentTurn) {
-                const sum = player.hand.reduce((acc, val) => acc + val, 0);
+                const sum = player.hand.reduce((acc, card) => acc + card.value, 0);
                 if (sum >= 18) count++;
             }
         })

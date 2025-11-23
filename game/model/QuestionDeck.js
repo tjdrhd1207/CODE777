@@ -53,6 +53,10 @@ class QuestionDeck {
     reShuffle() {
 
     }
+
+    drawTest(seq) {
+        return this.deckCards[seq-1];
+    }
 }
 
 export default QuestionDeck;

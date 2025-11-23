@@ -7,7 +7,7 @@ export default class RuleQ8 extends QuestionRule {
 
         players.forEach((player) => {
             /* 현재턴이 아닌 사람들 중 */
-            if (player.id !== players[currentTurn].id) {
+            if (player.userId !== players[currentTurn].userId) {
 
                 const valueMap = new Map();
 

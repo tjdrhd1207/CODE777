@@ -39,6 +39,8 @@ export async function initLobbyPage() {
 
     // 서버에 참가자 업데이트 이벤트
     socket.on('updateParticipants', (data) => {
+        console.log("데이터");
+        console.log(data);
         if (data.roomId === roomId) {
             const currentParticipants = data.participants;
 
@@ -58,21 +60,21 @@ export async function initLobbyPage() {
             `;
 
             // 2️⃣ 새로운 참가자 목록으로 테이블 채우기
-            data.participants.forEach((userId, index) => {
+            currentParticipants.forEach((participant, index) => {
                 const tr = document.createElement('tr');
-                tr.id = `participant-${userId}`;
+                tr.id = `participant-${participant.userId}`;
 
-                if (currentUserId === userId) {
+                if (currentUserId === participant.userId) {
                     tr.classList.add("currentTr");
                 }
 
                 const indexTd = document.createElement('td');
                 indexTd.textContent = index + 1; // 번호 1부터 시작
                 const nameTd = document.createElement('td');
-                nameTd.textContent = userId;
+                nameTd.textContent = participant.userId;
                 const readyTd = document.createElement('td');
 
-                const isReady = participantsReadyState[userId] || false;
+                const isReady = participantsReadyState[participant.userId] || false;
                 readyTd.textContent = isReady ? "✅ 준비 완료" : "⏳ 대기";
 
                 tr.appendChild(indexTd);
@@ -82,14 +84,14 @@ export async function initLobbyPage() {
                 participantTable.appendChild(tr);
 
                 // 새 유저면 초기값 추가
-                if (!(userId in participantsReadyState)) {
-                    participantsReadyState[userId] = false;
+                if (!(participant.userId in participantsReadyState)) {
+                    participantsReadyState[participant.userId] = false;
                 }
             });
 
             // 3️⃣ participant 텍스트도 갱신
-            participant.textContent = "현재 참가자 : " + data.participants.join(', ');
-            console.log('업데이트된 참가자 목록 : ' + data.participants);
+            participant.textContent = "현재 참가자 : " + currentParticipants.map(p => p.userId).join(', ');
+            console.log('업데이트된 참가자 목록 : ' + currentParticipants.map(p => p.userId));
         }
     });
 

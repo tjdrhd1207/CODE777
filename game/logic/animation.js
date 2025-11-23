@@ -171,6 +171,8 @@ function setPlayerPosition(playerId, element) {
 }
 
 export function deckAnswerSetting(answer) {
+    console.log("UI단에서 전달받은 ANSWER");
+    console.log(answer);
     const deckAnswerDiv = document.querySelector(".answer");
     while (deckAnswerDiv.firstChild) {
         deckAnswerDiv.removeChild(deckAnswerDiv.firstChild);

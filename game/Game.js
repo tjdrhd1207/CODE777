@@ -37,6 +37,11 @@ class Game {
         this.currentTurn = currentTurn;
     }
 
+    // 이전턴 세팅
+    setPreviousTurn(previousTurn) {
+        this.previousTurn = previousTurn;
+    }
+
     // 정답 세팅
     setAnswer(answer) {
         this.answer = answer;
@@ -55,6 +60,10 @@ class Game {
 
     getCurrentTurn() {
         return this.currentTurn;
+    }
+
+    getPreivousTurn() {
+        return this.previousTurn;
     }
 
     drawQuestionCard() {
@@ -81,7 +90,6 @@ class Game {
         // TODO
         // 스타트 시에 이전의 정보는 다 리셋되어야 할 것 같음
         // 스타트를 계속하면 더 추가가 됨
-
         console.log("--Game Start--");
         const boardCenter = document.querySelector(".board-center");
 
@@ -90,13 +98,15 @@ class Game {
         existingPlayerDivs.forEach(div => div.remove());
 
         hintDeckInitSetting(boardCenter);
-        this.previousTurn = this.currentTurn;
+        /* this.previousTurn = this.currentTurn; */
 
-        this.players.forEach((player) => {
-            if (distributedCards[player.userId]) {
-                player.hand = distributedCards[player.userId];
-            }
+        this.players.forEach(player => {
+            const playerId = typeof player.userId === "object" ? player.userId.userId : player.userId;
+            player.hand = distributedCards[playerId] || [];
         });
+
+        console.log("핸드 할당 완료:", this.players.map(p => ({ userId: p.userId, hand: p.hand })));
+
         animateShuffle().then(() => {
             animateDeal(this.cardDeck.cards, this.players, currentUserId);
 
@@ -117,19 +127,24 @@ class Game {
         // 질문덱에서 질문 뽑기
         this.questionCard = this.drawQuestionCard();
         const ruleEngine = new RuleEngine(this.cardDeck);
+        console.log(this.players);
+
         this.answer = ruleEngine.evaluate(this.questionCard.seq, this.players, this.currentTurn);
     }
 
     updateTurnUI(players, question, answer) {
+        console.log(this.previousTurn);
         if (this.previousTurn >= 0) {
             const previousNameTag = document.querySelector(`.${players[this.previousTurn].userId}`);
             console.log(previousNameTag);
-            const previousHandRow = previousNameTag.querySelector(".name-hand-row");
-            console.log(previousHandRow);
-            if (previousHandRow) {
-                const previousImgTag = previousHandRow.querySelector(".hand-image");
-                if (previousImgTag) {
-                    previousHandRow.removeChild(previousImgTag);
+            if (previousNameTag) {
+                const previousHandRow = previousNameTag.querySelector(".name-hand-row");
+                console.log(previousHandRow);
+                if (previousHandRow) {
+                    const previousImgTag = previousHandRow.querySelector(".hand-image");
+                    if (previousImgTag) {
+                        previousHandRow.removeChild(previousImgTag);
+                    }
                 }
             }
         }
@@ -165,7 +180,7 @@ class Game {
         console.log(answer);
         // question, answer가 있을 때만 호출
         if (question) hintDeckDrawSetting(question);
-        if (answer) deckAnswerSetting(answer);
+        if (answer !== undefined && answer !== null) deckAnswerSetting(answer);
     }
 
 }

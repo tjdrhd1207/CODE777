@@ -8,7 +8,8 @@ export default class ShowMoreColorRule extends QuestionRule {
     }
 
     evaluate(players, currentTurn, cardDeck) {
-        console.log(players, currentTurn, cardDeck);
+        console.log("---플레이어정보----");
+        console.log(players);
         return showMoreColor(
             players,
             currentTurn,

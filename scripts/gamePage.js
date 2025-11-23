@@ -39,9 +39,9 @@ export async function initGamePage() {
         showAnswerField();
     });
 
-    nextTurn.addEventListener("click", ( ) => {
+    nextTurn.addEventListener("click", () => {
         console.log("다음턴 실행");
-        socket.emit("nextTurn", { 
+        socket.emit("nextTurn", {
             roomId
         });
     })
@@ -54,23 +54,33 @@ export async function initGamePage() {
         game.submitAnswer(player1, submitArray);
     });
 
-    socket.on("gameStarted", ({ distributedCards }) => {
-        // distributedCards → player.hand 세팅
+    socket.on("gameStarted", ({ distributedCards, players: serverPlayers, currentTurn }) => {
+        game.players = serverPlayers.map(playerData => {
+            const id = typeof playerData.userId === "object" ? playerData.userId.userId : playerData.userId;
+            return new Player(id, playerData.index);
+        });
+
+        /* 
+        const npcPlayer = new Player("NPC", game.players.length);
+        game.players.push(npcPlayer); 
+        */
+
         game.players.forEach(player => {
             player.hand = distributedCards[player.userId] || [];
         });
 
-        game.start(distributedCards, currentUserId ); // start 함수에서 hand 기반으로 animateDeal 실행
+        game.start(distributedCards, currentUserId); // start 함수에서 hand 기반으로 animateDeal 실행
     });
 
-    socket.on("turnChanged", ({ currentTurn, currentPlayer, question, answer }) => {
+    socket.on("turnChanged", ({ currentTurn, previousTurn, currentPlayer, question, answer }) => {
         console.log(`🔁 턴 변경 - 현재턴: ${currentPlayer}`);
         console.log(question);
         console.log(answer);
 
         game.setCurrentTurn(currentTurn);
+        game.setPreviousTurn(previousTurn);
         game.setAnswer(answer);
         game.showQuestion(question);
-        game.updateTurnUI(players, question, answer);
+        game.updateTurnUI(game.players, question, answer);
     });
 }

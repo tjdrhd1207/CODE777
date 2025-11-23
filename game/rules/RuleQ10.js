@@ -6,8 +6,10 @@ export default class RuleQ10 extends QuestionRule {
         let count = 0;
         let cardSet = new Set();
 
+        console.log(players);
+        players.forEach(player => console.log(player.userId, player.hand));
         players.forEach((player) => {
-            if (player.id !== players[currentTurn].id) {
+            if (player.userId !== players[currentTurn].userId) {
                 player.hand.forEach((card) => cardSet.add(card.value));
             }
         });
