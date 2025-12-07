@@ -1,3 +1,4 @@
+import { YELLOW } from "./colorMap.js";
 import QuestionRule from "./QuestionRule.js";
 
 // 노랑 2와 노랑 7 중에서 어느 것이 더 많이 보입니까?

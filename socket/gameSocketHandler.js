@@ -32,7 +32,11 @@ export default function gameSocketHandler(io, socket) {
             for (let i = 0; i < 3; i++) {
                 distributedCards[player.userId].push(room.gameDeck.draw());
             }
+            
+            // 서버에서 핸드 나눠갖기
+            player.hand = distributedCards[player.userId];
         });
+
 
 
         if (!room.players.find(p => p.userId === "NPC")) {
@@ -42,15 +46,22 @@ export default function gameSocketHandler(io, socket) {
             for (let i = 0; i < 3; i++) {
                 distributedCards[npc.userId].push(room.gameDeck.draw());
             }
-
+            npc.hand = distributedCards[npc.userId];  // ⭐ NPC도 필수
         }
 
         // 4. 첫 턴 지정
         room.currentTurn = 0;
         room.previousTurn = -1;
 
+        const questionCard = room.questionDeck.draw();
+        const ruleEngine = new RuleEngine(room.gameDeck);
+        const answer = ruleEngine.evaluate(
+            questionCard.seq,
+            room.players,
+            room.currentTurn
+        );
         // 해당 방의 모든 유저에게 브로드캐스트
-        io.to(roomId).emit("gameStarted", { distributedCards, players: room.players, currentTurn: room.currentTurn });
+        io.to(roomId).emit("gameStarted", { distributedCards, players: room.players, currentTurn: room.currentTurn, questionCard, answer });
     });
 
     // 다음턴 요청
@@ -62,14 +73,19 @@ export default function gameSocketHandler(io, socket) {
         const players = room.players;
         if (!players || players.length === 0) return;
 
-        room.currentTurn = (room.currentTurn + 1) % room.players.length;
-        room.previousTurn = (room.currentTurn - 1 + room.players.length) % room.players.length;
+        let nextTurn = (room.currentTurn + 1) % room.players.length;
 
-        /* 
-        question 테스트용으로 인하여 주석처리
-        const question = room.questionDeck.draw(); 
-        */
-        const question = room.questionDeck.drawTest(10);
+        // NPC 만나면 다시 넘김
+        if (players[nextTurn].userId === "NPC") {
+            nextTurn = (nextTurn + 1) % room.players.length;
+        }
+
+        room.previousTurn = room.currentTurn;
+        room.currentTurn = nextTurn;
+        
+        const question = room.questionDeck.draw();        
+        // const question = room.questionDeck.drawTest(3);
+
         const ruleEngine = new RuleEngine(room.cardDeck);
 
         const answer = ruleEngine.evaluate(
@@ -77,8 +93,6 @@ export default function gameSocketHandler(io, socket) {
             room.players,
             room.currentTurn
         );
-        console.log("정답");
-        console.log(answer);
         // 상태 업데이트
         room.answer = answer;
         // 모든유저한테 전달

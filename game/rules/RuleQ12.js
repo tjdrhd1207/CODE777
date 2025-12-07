@@ -1,3 +1,4 @@
+import { PINK } from "./colorMap.js";
 import QuestionRule from "./QuestionRule.js";
 
 // 3과 분홍6 중에서 어느 것이 더 많이 보입니까?

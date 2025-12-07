@@ -106,8 +106,8 @@ export default function roomSocketHandler(io, socket) {
 
         room.questionDeck = new QuestionDeck();
         // TEST용으로 주석처리
-        // room.questionDeck.shuffle(); // ⭐ 꼭 섞기
-        console.log(room.players);
+        room.questionDeck.shuffle(); // ⭐ 꼭 섞기
+        // console.log(room.players);
         room.answer = null;
 
         // 해당 방 전체 클라이언트에 게임 시작 이벤트 전송

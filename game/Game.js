@@ -15,14 +15,15 @@ import RuleEngine from "./rules/RuleEngine.js";
 
 class Game {
 
-    constructor(players) {
+    constructor({players, questionDeck}) {
         this.players = players;
         this.previousTurn = 0;
         this.currentTurn = 0;
         this.answer = "";
         this.board = new Board();
-        this.questionDeck = new QuestionDeck();
-        this.questionCard = null;
+        // this.questionDeck = new QuestionDeck();
+        this.questionDeck = questionDeck;
+        // this.questionCard = null;
         const deckArray = generateDeck();
         this.cardDeck = new CardDeck(deckArray);
         // this.cardDeck.cardSetting();
@@ -75,10 +76,10 @@ class Game {
     }
 
     //이전 턴
-    advanceTurn() {
+    /* advanceTurn() {
         this.previousTurn = this.currentTurn;
         this.currentTurn = (this.currentTurn + 1) % this.players.length;
-    }
+    } */
 
     reshufflePlayerCards(player) {
         this.cardDeck.playerCardShuffle(player);
@@ -86,7 +87,7 @@ class Game {
         player.deal(this.cardDeck.card);
     }
 
-    start(distributedCards, currentUserId) {
+    start({ distributedCards, questionCard, answer }, currentUserId) {
         // TODO
         // 스타트 시에 이전의 정보는 다 리셋되어야 할 것 같음
         // 스타트를 계속하면 더 추가가 됨
@@ -107,23 +108,32 @@ class Game {
 
         console.log("핸드 할당 완료:", this.players.map(p => ({ userId: p.userId, hand: p.hand })));
 
+        this.questionCard = questionCard;
+        this.answer = answer;
+
         animateShuffle().then(() => {
-            animateDeal(this.cardDeck.cards, this.players, currentUserId);
+            animateDeal(Object.values(distributedCards).flat(), this.players, currentUserId);
 
             // ⭐ 첫 턴 질문/정답 세팅
-            this.questionCard = this.drawQuestionCard();
-            const ruleEngine = new RuleEngine(this.cardDeck);
-            this.answer = ruleEngine.evaluate(this.questionCard.seq, this.players, this.currentTurn);
+            // this.questionCard = this.drawQuestionCard();
+            // const ruleEngine = new RuleEngine(this.cardDeck);
+            // this.answer = ruleEngine.evaluate(this.questionCard.seq, this.players, this.currentTurn);
 
             this.updateTurnUI(this.players, this.questionCard, this.answer);
         });
     }
 
     nextTurn() {
+
         // 1. 턴 갱신
         this.currentTurn = ((this.currentTurn + 1) + this.players.length) % this.players.length;
         this.previousTurn = ((this.currentTurn - 1) + this.players.length) % this.players.length;
 
+        // NPC 스킵
+        if (this.players[this.currentTurn].userId === "NPC") {
+            this.currentTurn = (this.currentTurn + 1) % this.players.length;
+        }
+        
         // 질문덱에서 질문 뽑기
         this.questionCard = this.drawQuestionCard();
         const ruleEngine = new RuleEngine(this.cardDeck);

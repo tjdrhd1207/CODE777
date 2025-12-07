@@ -26,12 +26,17 @@ class QuestionDeck {
             { seq: 23, question: '녹색과 노랑 중에서 어느 것이 더 많이 보입니까?' },
         ];
         this.nowQuestion = null;
+        this.shuffle();
+        this.originalCards = [...this.deckCards];
     }
 
     draw() {
+        if (this.deckCards.length === 0) {
+            this.reShuffle();
+        }
         // 덱을 드로우 함
         // 덱 뭉치에서 하나 꺼냄
-        const drawedQuestion = this.deckCards.pop();
+        const drawedQuestion = this.deckCards.shift();
         this.nowQuestion = drawedQuestion;
         return drawedQuestion;
     }
@@ -51,7 +56,8 @@ class QuestionDeck {
     }
 
     reShuffle() {
-
+        this.deckCards = [...this.originalCards];
+        this.shuffle();
     }
 
     drawTest(seq) {

@@ -17,11 +17,11 @@ export default class RuleQ3 extends QuestionRule {
 
                 console.log(valueMap);
                 // 숫자는 같고 색깔이 다른카드 확인
-                let count = 0;
+                let hasMatch = false;
                 valueMap.forEach((colors) => {
-                    if (colors.size > 1) count++;
+                    if (colors.size > 1) hasMatch = true;
                 });
-                if (count !== 0) count++;
+                if (hasMatch) count++;
             }
         })
         return count;
