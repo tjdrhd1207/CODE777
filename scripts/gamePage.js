@@ -10,6 +10,20 @@ import CardDeck from "../game/logic/CardDeck.js";
 let BACKEND_URL = "http://localhost:3030";
 
 export async function initGamePage() {
+
+    // 타이머 DOM 생성
+    const timerElement = document.createElement("div");
+    timerElement.id = "timer";
+    timerElement.style.display = "none";
+    timerElement.style.fontSize = "32px";
+    timerElement.style.fontWeight = "bold";
+    timerElement.style.color = "red";
+    timerElement.style.position = "absolute";
+    timerElement.style.top = "20px";
+    timerElement.style.right = "20px";
+
+    document.body.appendChild(timerElement);
+
     // const socket = io(BACKEND_URL); // 서버 주소
     const currentUserId = localStorage.getItem("currentUserId");
     const roomId = localStorage.getItem("roomId");
@@ -36,6 +50,7 @@ export async function initGamePage() {
     shuffleBtn.addEventListener("click", () => {
         console.log("게임 시작 클릭");
         socket.emit("startGameAndShuffle", { roomId });
+        document.querySelector("#timer").style.display = "block";
     });
 
     attemptAnswerBtn.addEventListener("click", () => {
@@ -80,5 +95,12 @@ export async function initGamePage() {
         game.setAnswer(answer);
         game.showQuestion(question);
         game.updateTurnUI(game.players, question, answer);
+    });
+
+    socket.on("timer", ({ timeLeft }) => {
+        const timerDiv = document.getElementById("timer");
+        if (timerDiv) {
+            timerDiv.innerText = timeLeft;
+        }
     });
 }

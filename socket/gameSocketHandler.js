@@ -9,16 +9,75 @@ import { rooms, readyStates } from './room.js';
 export default function gameSocketHandler(io, socket) {
     console.log("🎮 Game socket connected:", socket.id);
 
+    // 공용타이머
+    function startTimer(roomId) {
+        const room = rooms[roomId];
+        if (!room) return;
+
+        if (room.timer) clearInterval(room.timer);
+
+        room.timeLeft = 60;
+
+        io.to(roomId).emit("timer", { timeLeft: room.timeLeft });
+
+        room.timer = setInterval(() => {
+            room.timeLeft--;
+
+            io.to(roomId).emit("timer", { timeLeft: room.timeLeft });
+            // 1초마다 갱신된 시간 브로드캐스트
+            if (room.timeLeft <= 0) {
+                clearInterval(room.timer);
+                room.timer = null;
+                autoNextTurn(roomId);
+            }
+        }, 1000);
+    }
+
+    function autoNextTurn(roomId) {
+        const room = rooms[roomId];
+        if (!room) return;
+
+        const players = room.players;
+        if (!players || players.length === 0) return;
+
+        let nextTurn = (room.currentTurn + 1) % players.length;
+
+        // NPC 만나면 다시 넘김
+        if (players[nextTurn].userId === "NPC") {
+            nextTurn = (nextTurn + 1) % room.players.length;
+        }
+
+        room.previousTurn = room.currentTurn;
+        room.currentTurn = nextTurn;
+
+        const question = room.questionDeck.draw();
+        const ruleEngine = new RuleEngine(room.gameDeck);
+
+        const answer = ruleEngine.evaluate(
+            question.seq,
+            room.players,
+            room.currentTurn
+        );
+
+        // 모든유저에게 턴 변경 broadcast
+        io.to(roomId).emit("turnChanged", {
+            currentTurn: room.currentTurn,
+            previousTurn: room.previousTurn,
+            currentPlayer: room.players[room.currentTurn],
+            question,
+            answer
+        });
+
+        // 💥 다음 턴의 타이머도 다시 시작
+        startTimer(roomId);
+    }
+
     // 게임 시작 요청
     socket.on("startGameAndShuffle", ({ roomId }) => {
         console.log(`게임 시작 요청: room=${roomId}, by=${socket.id}`);
 
         const room = rooms[roomId];
         if (!room) return;
-
-        // NPC도 추가
-        // rooms에서 플레이어 가져오기
-        // const players = [...room.players];
 
         const deckArray = generateDeck();
         room.gameDeck = new CardDeck(deckArray);
@@ -32,7 +91,7 @@ export default function gameSocketHandler(io, socket) {
             for (let i = 0; i < 3; i++) {
                 distributedCards[player.userId].push(room.gameDeck.draw());
             }
-            
+
             // 서버에서 핸드 나눠갖기
             player.hand = distributedCards[player.userId];
         });
@@ -61,47 +120,22 @@ export default function gameSocketHandler(io, socket) {
             room.currentTurn
         );
         // 해당 방의 모든 유저에게 브로드캐스트
-        io.to(roomId).emit("gameStarted", { distributedCards, players: room.players, currentTurn: room.currentTurn, questionCard, answer });
+        io.to(roomId).emit("gameStarted", {
+            distributedCards,
+            players: room.players,
+            currentTurn: room.currentTurn,
+            questionCard,
+            answer
+        });
+
+        startTimer(roomId);
     });
 
     // 다음턴 요청
     socket.on("nextTurn", ({ roomId }) => {
         const room = rooms[roomId];
-        if (!room) return;
+        if (room?.timer) clearInterval(room.timer);
 
-        // rooms에서 플레이어 가져오기
-        const players = room.players;
-        if (!players || players.length === 0) return;
-
-        let nextTurn = (room.currentTurn + 1) % room.players.length;
-
-        // NPC 만나면 다시 넘김
-        if (players[nextTurn].userId === "NPC") {
-            nextTurn = (nextTurn + 1) % room.players.length;
-        }
-
-        room.previousTurn = room.currentTurn;
-        room.currentTurn = nextTurn;
-        
-        const question = room.questionDeck.draw();        
-        // const question = room.questionDeck.drawTest(3);
-
-        const ruleEngine = new RuleEngine(room.cardDeck);
-
-        const answer = ruleEngine.evaluate(
-            question.seq,
-            room.players,
-            room.currentTurn
-        );
-        // 상태 업데이트
-        room.answer = answer;
-        // 모든유저한테 전달
-        io.to(roomId).emit("turnChanged", {
-            currentTurn: room.currentTurn,
-            previousTurn: room.previousTurn,
-            currentPlayer: room.players[room.currentTurn],
-            question: question,
-            answer
-        });
+        autoNextTurn(roomId);
     });
 }
