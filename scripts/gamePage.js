@@ -6,6 +6,7 @@ import RuleEngine from "../game/rules/RuleEngine.js";
 import { generateDeck } from "../game/logic/cardFactory.js";
 import QuestionDeck from "../game/model/QuestionDeck.js";
 import CardDeck from "../game/logic/CardDeck.js";
+import openAnswerModal from "./answerModal.js";
 
 let BACKEND_URL = "http://localhost:3030";
 
@@ -17,7 +18,7 @@ export async function initGamePage() {
     timerElement.style.display = "none";
     timerElement.style.fontSize = "32px";
     timerElement.style.fontWeight = "bold";
-    timerElement.style.color = "red";
+    timerElement.style.color = "black";
     timerElement.style.position = "absolute";
     timerElement.style.top = "20px";
     timerElement.style.right = "20px";
@@ -33,10 +34,6 @@ export async function initGamePage() {
     });
     const helperPlayer = new Player("NPC", humanPlayers.length);
     const players = [...humanPlayers, helperPlayer];
-
-    console.log("현재 방 : " + roomId);
-    console.log("참여자 : " + players);
-
     const game = new Game({
         players,
         questionDeck: new QuestionDeck()
@@ -45,16 +42,30 @@ export async function initGamePage() {
     const shuffleBtn = document.querySelector(".shuffle-button");
     const nextTurn = document.querySelector(".next-turn-button");
     const attemptAnswerBtn = document.querySelector(".attempt-answer-button");
-    const submiAnswerBtn = document.querySelector(".submit-answer");
+    const submitAnswerBtn = document.querySelector(".submit-answer");
 
     shuffleBtn.addEventListener("click", () => {
-        console.log("게임 시작 클릭");
         socket.emit("startGameAndShuffle", { roomId });
         document.querySelector("#timer").style.display = "block";
     });
 
-    attemptAnswerBtn.addEventListener("click", () => {
-        showAnswerField();
+    attemptAnswerBtn.addEventListener("click", async function (e) {
+        e.stopPropagation();
+        console.log("제출");
+        socket.emit("submitAnswer", { roomId });
+
+        try {
+            const submitArray = await openAnswerModal();
+            // 세개의 값을 적고 제출했는지 체크
+            // game.submitAnswer(player1, submitArray);
+            socket.emit("submitAnswer", {
+                roomId,
+                userId: currentUserId,
+                answer: submitArray
+            });
+        } catch {
+            console.log("답안제출 취소");
+        }
     });
 
     nextTurn.addEventListener("click", () => {
@@ -64,12 +75,8 @@ export async function initGamePage() {
         });
     })
 
-    submiAnswerBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        console.log("제출");
-        const submitArray = checkAnswer();
-        // 세개의 값을 적고 제출했는지 체크
-        game.submitAnswer(player1, submitArray);
+    submitAnswerBtn.addEventListener("click", async function (e) {
+        
     });
 
     socket.on("gameStarted", ({ distributedCards, players: serverPlayers, currentTurn, questionCard, answer }) => {
@@ -100,6 +107,7 @@ export async function initGamePage() {
     socket.on("timer", ({ timeLeft }) => {
         const timerDiv = document.getElementById("timer");
         if (timerDiv) {
+            timerDiv.style.display = "block"; // ⭐ 핵심
             timerDiv.innerText = timeLeft;
         }
     });
