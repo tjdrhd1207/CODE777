@@ -138,4 +138,31 @@ export default function gameSocketHandler(io, socket) {
 
         autoNextTurn(roomId);
     });
+
+    socket.on("submitAnswer", ({ roomId, userId, answer }) => {
+        const room = rooms[roomId];
+        if (!room) return;
+
+        const ruleEngine = new RuleEngine(room.gameDeck);
+        // ruleEngine에 현재 없음
+        console.log(room.questionDeck);
+        /* const isCorrect = ruleEngine.checkAnswer(
+            room.questionDeck.nowQuestion.seq,
+            answer,
+            room.players,
+            room.currentTurn
+        ); */
+        console.log("---결과제출 서버단 socket---");
+        const isCorrect = true;
+        io.to(roomId).emit("answerResult", {
+            userId,
+            answer,
+            isCorrect
+        });
+
+        /* if(isCorrect) {
+            // 코인 하나 추가
+            // 게임 다시 셔플 후 나누기
+        } */
+    });
 }

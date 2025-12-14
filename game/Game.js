@@ -162,7 +162,6 @@ class Game {
         const playerDiv = document.querySelector(`.${players[this.currentTurn].userId}`);
         let nameHandRow = playerDiv.querySelector(".name-hand-row");
 
-        // name-hand-row가 없으면 새로 생성
         if (!nameHandRow) {
             nameHandRow = document.createElement("div");
             nameHandRow.classList.add("name-hand-row");
@@ -185,9 +184,6 @@ class Game {
         turnImg.classList.add("hand-image");
         turnImg.setAttribute("src", 'assets/hand-icon2.png');
         nameHandRow.appendChild(turnImg);
-        console.log("질문");
-        console.log(question);
-        console.log(answer);
         // question, answer가 있을 때만 호출
         if (question) hintDeckDrawSetting(question);
         if (answer !== undefined && answer !== null) deckAnswerSetting(answer);

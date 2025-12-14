@@ -63,6 +63,8 @@ export function animateDeal(card, players, currentUserId) {
         playerDiv = document.createElement("div");
         const playerNameTag = document.createElement("div");
         const cardContainer = document.createElement("div");
+        const playerAnswer = document.createElement("div");
+
         cardContainer.classList.add("card-container");
 
         playerNameTag.innerHTML = players[i].userId;
@@ -71,7 +73,11 @@ export function animateDeal(card, players, currentUserId) {
         playerDiv.classList.add(`player-${players[i].userId}`);
         playerDiv.dataset.playerId = players[i].userId;
         playerNameTag.classList.add('name-font');
+        playerAnswer.classList.add('player-answer');
+
+
         playerDiv.appendChild(playerNameTag);
+        playerDiv.appendChild(playerAnswer);
         playerDiv.appendChild(cardContainer);
 
         setPlayerPosition(i, playerDiv);

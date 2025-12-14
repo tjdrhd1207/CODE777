@@ -66,7 +66,7 @@ export default function openAnswerModal() {
 
 
         submitBtn.addEventListener("click", () => {
-            if (selected.length() !== 3) {
+            if (selected.length !== 3) {
                 alert("숫자 3개를 선택하세요");
                 return;
             }

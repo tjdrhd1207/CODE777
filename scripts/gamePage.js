@@ -56,6 +56,7 @@ export async function initGamePage() {
 
         try {
             const submitArray = await openAnswerModal();
+            console.log(submitArray);
             // 세개의 값을 적고 제출했는지 체크
             // game.submitAnswer(player1, submitArray);
             socket.emit("submitAnswer", {
@@ -111,4 +112,29 @@ export async function initGamePage() {
             timerDiv.innerText = timeLeft;
         }
     });
+
+    socket.on("answerResult", ({ userId, answer, isCorrect }) => {
+        console.log("대답결과");
+        showPlayerAnswer(userId, answer, isCorrect);
+    });
+}
+
+function showPlayerAnswer(userId, answer, isCorrect) {
+    const playerEl = document.querySelector(
+        `.div-alignment[data-userid="${userId}"]`
+    );
+    if (!playerEl) return;
+
+    const answerEl = playerEl.querySelector(".player-answer");
+
+    answerEl.innerText = `(${answer.join(", ")})`;
+    answerEl.style.marginLeft = "8px";
+    answerEl.style.fontWeight = "bold";
+    answerEl.style.color = isCorrect ? "green" : "red";
+}
+
+function clearAnswers() {
+    document.querySelectorAll(".player-answer").forEach(el => {
+        el.innerText = "";
+    });    
 }
