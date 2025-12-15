@@ -13,6 +13,7 @@ export default function roomSocketHandler(io, socket) {
             players: [],
             ready: {},
             currentTurn: 0,
+            gameState: "WAITING",
             previousTurn: null,
             gameStarted: false,
             cardDeck: null,
@@ -97,6 +98,7 @@ export default function roomSocketHandler(io, socket) {
         const room = rooms[roomId];
         if (!room) return;
 
+        room.gameState = "PLAYING";
         room.currentTurn = 0;
         room.previousTurn = room.players.length - 1;
         room.gameStarted = true;

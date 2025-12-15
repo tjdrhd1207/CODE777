@@ -143,17 +143,15 @@ export default function gameSocketHandler(io, socket) {
         const room = rooms[roomId];
         if (!room) return;
 
+        if (room.gameState !== "PLAYING") return;
+
         const ruleEngine = new RuleEngine(room.gameDeck);
-        // ruleEngine에 현재 없음
-        console.log(room.questionDeck);
-        /* const isCorrect = ruleEngine.checkAnswer(
-            room.questionDeck.nowQuestion.seq,
+        const isCorrect = ruleEngine.checkAnswer(
             answer,
             room.players,
+            userId,
             room.currentTurn
-        ); */
-        console.log("---결과제출 서버단 socket---");
-        const isCorrect = true;
+        );
         io.to(roomId).emit("answerResult", {
             userId,
             answer,
@@ -165,4 +163,20 @@ export default function gameSocketHandler(io, socket) {
             // 게임 다시 셔플 후 나누기
         } */
     });
+
+    socket.on("shoutAnswer", ({ roomId, userId }) => {
+        const room = rooms[roomId];
+        if (!room) return;
+        console.log("게임엔서");
+        console.log(room.gameState);
+        if (room.gameState !== "PLAYING") return;
+
+        room.gameState = "STOPPED";
+        room.shoutedBy = userId;
+
+        io.to(roomId).emit("gameStopped", {
+            shoutedBy: userId
+        });
+
+    })
 }

@@ -58,4 +58,34 @@ export default class RuleEngine {
         if (!rule) return null;
         return rule.evaluate(players, currentTurn, this.cardDeck);
     }
+
+    checkAnswer(answer, players, userId, currentTurn) {
+        console.log('-----');
+        console.log(answer);
+        console.log(players);
+        console.log(userId);
+        console.log(currentTurn);
+        console.log(players)
+
+        const submittedPlayer = players.find((player) => {
+            return player.userId = userId;
+        });
+
+        console.log(submittedPlayer);
+        const handCard = submittedPlayer.hand.map((card) => card.value);
+        const result = this.isSameArray(handCard, answer);
+        console.log(result);
+        console.log('-----');
+
+        return result;
+    }
+
+    isSameArray(a, b) {
+        if (a.length !== b.length) return false;
+
+        const sortedA = [...a].sort();
+        const sortedB = [...b].sort();
+
+        return sortedA.every((v, i) => v === sortedB[i]);
+    }
 }

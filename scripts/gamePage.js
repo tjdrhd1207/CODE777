@@ -7,6 +7,7 @@ import { generateDeck } from "../game/logic/cardFactory.js";
 import QuestionDeck from "../game/model/QuestionDeck.js";
 import CardDeck from "../game/logic/CardDeck.js";
 import openAnswerModal from "./answerModal.js";
+import { showOverlay } from "./overlay.js";
 
 let BACKEND_URL = "http://localhost:3030";
 
@@ -51,9 +52,12 @@ export async function initGamePage() {
 
     attemptAnswerBtn.addEventListener("click", async function (e) {
         e.stopPropagation();
-        console.log("제출");
-        socket.emit("submitAnswer", { roomId });
-
+        console.log("정답외치기 버튼클릭 바로직후");
+        socket.emit("shoutAnswer", {
+            roomId,
+            userId: currentUserId,
+        });
+        
         try {
             const submitArray = await openAnswerModal();
             console.log(submitArray);
@@ -114,23 +118,34 @@ export async function initGamePage() {
     });
 
     socket.on("answerResult", ({ userId, answer, isCorrect }) => {
-        console.log("대답결과");
         showPlayerAnswer(userId, answer, isCorrect);
     });
+
+    socket.on("gameStopped", ({ shoutedBy }) => {
+        console.log("정답외치기2");
+        console.log(shoutedBy);
+        console.log(currentUserId);
+        if (shoutedBy !== currentUserId) {
+            console.log("정답외치기");
+            // disableAllInputs();
+            showOverlay(`${shoutedBy}님이 정답을 외쳤습니다!`);
+        }
+    })
 }
 
 function showPlayerAnswer(userId, answer, isCorrect) {
     const playerEl = document.querySelector(
-        `.div-alignment[data-userid="${userId}"]`
+        `.div-alignment[data-player-id="${userId}"]`
     );
     if (!playerEl) return;
 
     const answerEl = playerEl.querySelector(".player-answer");
 
-    answerEl.innerText = `(${answer.join(", ")})`;
+    answerEl.innerText = `제출답안: ${answer.join(", ")}`;
     answerEl.style.marginLeft = "8px";
+    answerEl.style.fontSize = "25px";
     answerEl.style.fontWeight = "bold";
-    answerEl.style.color = isCorrect ? "green" : "red";
+    answerEl.style.color = isCorrect ? "blue" : "red";
 }
 
 function clearAnswers() {
