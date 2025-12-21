@@ -2,9 +2,9 @@ export function animateShuffle() {
     return new Promise((resolve) => {
         const cardDeck = document.querySelectorAll('.deck-tail');
         let animationCompleted = 0;
-        for (let i =0; i < cardDeck.length; i++) {
+        for (let i = 0; i < cardDeck.length; i++) {
             cardDeck[i].classList.add(`is-animated-${i}`);
-        
+
             // 애니메이션 종료 시 이벤트 리스너 등록
             cardDeck[i].addEventListener("animationend", (event) => {
                 if (event.animationName === "shuffle") {
@@ -58,7 +58,7 @@ export function animateDeal(card, players, currentUserId) {
     const playerDivs = [];
     const totalCards = players[0].hand.length;
 
-    for (let i =0; i< players.length; i++) {
+    for (let i = 0; i < players.length; i++) {
         const board = document.querySelector(".board");
         playerDiv = document.createElement("div");
         const playerNameTag = document.createElement("div");
@@ -93,10 +93,10 @@ export function animateDeal(card, players, currentUserId) {
         for (let j = 0; j < players.length; j++) {
             const imgDiv = document.createElement("div");
             imgDiv.classList.add("player-hand-card");
-            
+
             const imgTag = document.createElement("img");
             const imgBack = document.createElement("img");
-            
+
             // 자기 자신일 경우, 앞면 숨기기
             if (players[j].userId === currentUserId) {
                 imgTag.setAttribute("src", "assets/back-card.png");
@@ -110,23 +110,23 @@ export function animateDeal(card, players, currentUserId) {
 
             setTimeout(() => {
                 const animationClass = getAnimationClass(j, i);
-    
+
                 if (!deckTail[count]) {
                     console.error(`Error: deckTail[${count}] is undefined!`);
                     return;
                 }
-    
+
                 deckTail[count].classList.add(animationClass);
-    
+
                 let currentCount = count; // 현재 count 값을 저장 (이벤트 핸들러에서 올바른 값을 참조하도록)
                 count++; // **여기서 증가시켜야 모든 카드가 고유한 deckTail[count]를 참조함!**
-    
+
                 deckTail[currentCount].addEventListener("animationend", function onAnimationEnd() {
                     deckTail[currentCount].removeEventListener("animationend", onAnimationEnd);
                     const cardContainer = playerDivs[j].querySelector(".card-container");
                     cardContainer.appendChild(imgDiv);
                 });
-    
+
             }, (i * players.length + j) * delay);
         }
     }
@@ -145,28 +145,28 @@ function getAnimationClass(playerIndex, cardIndex) {
 
 function setPlayerPosition(playerId, element) {
     switch (playerId) {
-        case 0 : {
+        case 0: {
             element.style.position = 'absolute';
             element.style.top = '50%';
             element.style.left = '0';
             element.style.transform = 'translateY(-50%)'; // 수직 중앙 맞추기
             return;
         }
-        case 1 : {
+        case 1: {
             element.style.position = 'absolute';
             element.style.top = '50%';
             element.style.right = '0';
             element.style.transform = 'translateY(-50%)'; // 수직 중앙 맞추기
             return;
         }
-        case 2 : {
+        case 2: {
             element.style.position = 'absolute';
             element.style.left = '50%';
             element.style.top = '0';
             element.style.transform = 'translateX(-50%)'; // 수평 중앙 맞추기
             return;
         }
-        case 3 : {
+        case 3: {
             element.style.position = 'absolute';
             element.style.left = '50%';
             element.style.bottom = '0';
@@ -207,7 +207,7 @@ export function showAnswerNumberField(params, callback) {
 
                 // const input = params.target.querySelector(".answer-result");
                 // input.innerText = selectedNumber;
-                
+
                 if (callback) {
                     callback(selectedNumber);
                 }
@@ -286,3 +286,4 @@ export function retrieveAnimation(playerId) {
         child.classList.add("card-retrieve");
     });
 }
+

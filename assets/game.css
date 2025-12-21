@@ -481,3 +481,71 @@ body {
 .overlay.hidden {
   display: none;
 }
+
+.answer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.answer-overlay.hidden {
+    display: none;
+}
+
+.answer-box {
+    background: #111;
+    padding: 40px 60px;
+    border-radius: 16px;
+    text-align: center;
+    animation: popIn 0.3s ease-out;
+}
+
+.answer-user {
+    color: white;
+    font-size: 28px;
+    margin-bottom: 12px;
+}
+
+.answer-text {
+    color: white;
+    font-size: 26px;
+    margin-bottom: 16px;
+}
+
+.answer-result {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.answer-result.correct {
+    color: #4CAF50;
+    animation: glowGreen 1s infinite alternate;
+}
+
+.answer-result.wrong {
+    color: #F44336;
+    animation: shake 0.4s;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to {transform: scale(1); opacity: 1; }
+}
+
+@keyframes glowGreen {
+    from { text-shadow: 0 0 10px #4CAF50; }
+    to   { text-shadow: 0 0 25px #4CAF50; }
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}

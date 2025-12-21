@@ -113,12 +113,6 @@ class Game {
 
         animateShuffle().then(() => {
             animateDeal(Object.values(distributedCards).flat(), this.players, currentUserId);
-
-            // ⭐ 첫 턴 질문/정답 세팅
-            // this.questionCard = this.drawQuestionCard();
-            // const ruleEngine = new RuleEngine(this.cardDeck);
-            // this.answer = ruleEngine.evaluate(this.questionCard.seq, this.players, this.currentTurn);
-
             this.updateTurnUI(this.players, this.questionCard, this.answer);
         });
     }

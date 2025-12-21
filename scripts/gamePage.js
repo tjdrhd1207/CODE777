@@ -7,7 +7,8 @@ import { generateDeck } from "../game/logic/cardFactory.js";
 import QuestionDeck from "../game/model/QuestionDeck.js";
 import CardDeck from "../game/logic/CardDeck.js";
 import openAnswerModal from "./answerModal.js";
-import { showOverlay } from "./overlay.js";
+import { hideOverlay, showOverlay } from "./overlay.js";
+import { initAnswerOverlay, showAnswerResultOverlay } from "./answerOverlay.js";
 
 let BACKEND_URL = "http://localhost:3030";
 
@@ -24,6 +25,7 @@ export async function initGamePage() {
     timerElement.style.top = "20px";
     timerElement.style.right = "20px";
 
+    initAnswerOverlay();
     document.body.appendChild(timerElement);
 
     // const socket = io(BACKEND_URL); // 서버 주소
@@ -118,18 +120,21 @@ export async function initGamePage() {
     });
 
     socket.on("answerResult", ({ userId, answer, isCorrect }) => {
-        showPlayerAnswer(userId, answer, isCorrect);
+        // showPlayerAnswer(userId, answer, isCorrect);
+        showAnswerResultOverlay(userId, answer, isCorrect);
     });
 
     socket.on("gameStopped", ({ shoutedBy }) => {
-        console.log("정답외치기2");
-        console.log(shoutedBy);
-        console.log(currentUserId);
         if (shoutedBy !== currentUserId) {
             console.log("정답외치기");
             // disableAllInputs();
             showOverlay(`${shoutedBy}님이 정답을 외쳤습니다!`);
         }
+    });
+
+    socket.on("gameResumed", () => {
+        console.log("게임 재개");
+        hideOverlay();
     })
 }
 

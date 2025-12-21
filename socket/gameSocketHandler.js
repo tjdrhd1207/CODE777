@@ -142,8 +142,9 @@ export default function gameSocketHandler(io, socket) {
     socket.on("submitAnswer", ({ roomId, userId, answer }) => {
         const room = rooms[roomId];
         if (!room) return;
-
-        if (room.gameState !== "PLAYING") return;
+        console.log("게임 상태");
+        console.log(room.gameState);
+        if (room.gameState !== "STOPPED") return;
 
         const ruleEngine = new RuleEngine(room.gameDeck);
         const isCorrect = ruleEngine.checkAnswer(
@@ -152,16 +153,24 @@ export default function gameSocketHandler(io, socket) {
             userId,
             room.currentTurn
         );
+        console.log("백엔드 답안 제출1");
         io.to(roomId).emit("answerResult", {
             userId,
             answer,
             isCorrect
         });
+        console.log(isCorrect);
+        console.log("백엔드 답안 제출2");
 
-        /* if(isCorrect) {
+        if(isCorrect) {
             // 코인 하나 추가
             // 게임 다시 셔플 후 나누기
-        } */
+            io.to(roomId).emit("gameResumed");
+        } else {
+            room.gameState = "PLAYING";
+            room.shoutedBy = null;
+            io.to(roomId).emit("gameResumed");
+        }
     });
 
     socket.on("shoutAnswer", ({ roomId, userId }) => {
@@ -178,5 +187,5 @@ export default function gameSocketHandler(io, socket) {
             shoutedBy: userId
         });
 
-    })
+    });
 }
