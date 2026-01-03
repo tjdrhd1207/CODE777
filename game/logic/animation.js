@@ -202,11 +202,6 @@ export function showAnswerNumberField(params, callback) {
 
             box._clickHandler = function (e) { // 이벤트 리스너를 변수에 저장하여 관리
                 const selectedNumber = e.target.innerText.trim();
-                // console.log("클릭된 번호:", selectedNumber);
-                // console.log("현재 params.target:", params.target);
-
-                // const input = params.target.querySelector(".answer-result");
-                // input.innerText = selectedNumber;
 
                 if (callback) {
                     callback(selectedNumber);
