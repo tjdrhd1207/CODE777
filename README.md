@@ -50,3 +50,10 @@ Uncaught (in promise) TypeError: Failed to fetch dynamically imported module: ht
 
 - 해결방법
 js import 시 경로 제대로 안맞는거 + import 시 뒤에 .js 를 안붙혀서 생긴 문제
+
+
+- Problem
+로그인 에러: TypeError: Cannot read properties of undefined (reading 'collection')
+
+- 해결방법(아직 미해결)
+mongo DB 연결이 아직 안되어있음
