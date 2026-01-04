@@ -1,3 +1,5 @@
+// front 시작 명령어 npx serve
+
 async function loadPage(url) {
     try {
         console.log(url);
@@ -36,7 +38,7 @@ export async function router() {
   }
 
   if (path === "/roomList") {
-    const module = await import("./room/roomListPage.js");
+    const module = await import("./roomList/roomListPage.js");
     module.initRoomListPage();
   }
 

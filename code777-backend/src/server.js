@@ -2,9 +2,18 @@ import http from "http";
 import { Server } from "socket.io";
 import { initSocket } from "./socket/index.js";
 import { app } from "./app.js";
+import { MongoClient } from "mongodb";
+import { loadRoomsFromDb } from "./repository/roomRepository.js";
+import RoomManager from "./domain/room/RoomManager.js";
 
 const PORT = 4000;
+const MONGO_URL = "mongodb+srv://jaemin:hansol@cluster0.3lo3bxi.mongodb.net/game?retryWrites=true&w=majority&appName=Cluster0";
 
+const client = new MongoClient(MONGO_URL, {
+    tls: true,
+    tlsAllowInvalidCertificates: true,
+    serverSelectionTimeoutMS: 10000,
+})
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -16,6 +25,23 @@ const io = new Server(server, {
 
 initSocket(io);
 
-server.listen(PORT, () => {
-    console.log(`🚀 Backend Server running on http://localhost:${PORT}`);
-})
+async function startServer() {
+    try {
+        await client.connect();
+        const db = client.db("game");
+
+        app.locals.db = db;
+        console.log("✅ MongoDB connected");
+        
+        const rooms = await loadRoomsFromDb(db);
+        RoomManager.initFromData(rooms);
+
+        server.listen(PORT, () => {
+            console.log(`🚀 Backend running on http://localhost:${PORT}`);
+        });
+    } catch (err) {
+        console.error("❌ MongoDB connection failed", err);
+    }
+}
+
+startServer();
