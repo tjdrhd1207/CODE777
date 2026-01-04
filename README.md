@@ -38,3 +38,15 @@ todo: 정답 버튼 눌렀을 때, 현재 숫자선택 버튼들이 나와있고
 2025/11/23
  - 첫턴 23번 문제가 고정됨
  - rule10번으로 고정해논 상태, 현재 게임 내의 프레이어의 hand가 빈값으로 보여짐
+
+
+--- 세팅 시 나오는 이슈들---
+
+
+2026/01/04
+
+- Problem
+Uncaught (in promise) TypeError: Failed to fetch dynamically imported module: http://localhost:3000/src/main/mainPage.js
+
+- 해결방법
+js import 시 경로 제대로 안맞는거 + import 시 뒤에 .js 를 안붙혀서 생긴 문제

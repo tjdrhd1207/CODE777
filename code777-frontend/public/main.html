@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" type="text/css" href="./styles/main.css" >
+    <script src="http://localhost:3030/env.js"></script>
+</head>
+<body>
+    <div class="main">
+        CODE777
+    </div>
+    <div class="main-menu-container">
+        <ul class="main-ul">
+            <li class="main-list game-start">시작</li>
+            <li class="main-list">Rule</li>
+            <li class="main-list">만든사람</li>
+        </ul>
+    </div>
+
+    <div id="openModal">
+        <div id="modalOverlay" class="modal-overlay">
+            <div class="modal">
+                <h2>로그인</h2>
+                <div class="input-group">
+                    <div>아이디</div>
+                    <input type="text" id="login-id" class="login-input">
+                </div>
+
+                <div class="input-group">
+                    <div class="">패스워드</div>
+                    <input type="password" id="login-pwd" class="login-input" placeholder="비밀번호를 입력하세요">
+                </div>
+                
+                <div class="modal-button-group">
+                    <div id="createUser" class="create-modal-btn modal-btn">생성</div>
+                    <div id="loginUser" class="login-modal-btn modal-btn">로그인</div>
+                    <div id="closeModal" class="close-modal-btn modal-btn">닫기</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
