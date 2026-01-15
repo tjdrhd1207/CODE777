@@ -6,7 +6,7 @@ import { MongoClient } from "mongodb";
 import { loadRoomsFromDb } from "./repository/roomRepository.js";
 import RoomManager from "./domain/room/RoomManager.js";
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 const MONGO_URL = "mongodb+srv://jaemin:hansol@cluster0.3lo3bxi.mongodb.net/game?retryWrites=true&w=majority&appName=Cluster0";
 
 const client = new MongoClient(MONGO_URL, {
