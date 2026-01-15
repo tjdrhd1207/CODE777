@@ -13,19 +13,28 @@ const app = express();
 
 /* 미들웨어 */
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "https://code777.vercel.app"
+    ],
     credentials: true
 }));
 
+
 app.use(express.static(path.join(__dirname, "../code777-frontend")));
 app.use(express.json());
+app.set("trust proxy", 1);
 app.use(session({
+  name: "code777.sid",
   secret: "code777-secret", // 나중에 .env로
   resave: false,
   saveUninitialized: false,
+  proxy: true,
   cookie: {
     httpOnly: true,
-    secure: false
+    // ⭐ 이게 핵심
+    secure: false,      // localhost는 HTTPS 아님
+    sameSite: "none"    // 3000 → 4000 쿠키 허용
   }
 }));
 
