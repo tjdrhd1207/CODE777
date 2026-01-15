@@ -3,7 +3,7 @@ app = "code777-backend"
 primary_region = "nrt"
 
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = "code777-backend/Dockerfile"
 
 [env]
   PORT = "4000"
