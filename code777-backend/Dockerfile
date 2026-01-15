@@ -2,10 +2,10 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY code777-backend/package*.json ./
+COPY package*.json ./
 RUN npm install
 
-COPY code777-backend ./
+COPY . .
 
 ENV PORT=4000
 EXPOSE 4000
