@@ -33,7 +33,7 @@ async function startServer() {
         console.log(`🚀 Backend running on http://localhost:${PORT}`);
     });
 
-    try {
+    /* try {
         await client.connect();
         const db = client.db("game");
 
@@ -45,7 +45,7 @@ async function startServer() {
 
     } catch (err) {
         console.error("❌ MongoDB connection failed", err);
-    }
+    } */
 }
 
 startServer();
