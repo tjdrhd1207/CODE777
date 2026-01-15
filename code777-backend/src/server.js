@@ -29,19 +29,20 @@ const io = new Server(server, {
 initSocket(io);
 
 async function startServer() {
+    server.listen(PORT, () => {
+        console.log(`🚀 Backend running on http://localhost:${PORT}`);
+    });
+
     try {
         await client.connect();
         const db = client.db("game");
 
         app.locals.db = db;
         console.log("✅ MongoDB connected");
-        
+
         const rooms = await loadRoomsFromDb(db);
         RoomManager.initFromData(rooms);
 
-        server.listen(PORT, () => {
-            console.log(`🚀 Backend running on http://localhost:${PORT}`);
-        });
     } catch (err) {
         console.error("❌ MongoDB connection failed", err);
     }
