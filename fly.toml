@@ -1,5 +1,4 @@
 app = "code777-backend"
-
 primary_region = "nrt"
 
 [build]
@@ -8,12 +7,6 @@ primary_region = "nrt"
 [env]
   PORT = "4000"
   NODE_ENV = "production"
-
-[http_service]
-  internal_port = 4000
-  force_https = true
-  auto_stop_machines = true
-  auto_start_machines = true
 
 [[services]]
   internal_port = 4000
@@ -27,6 +20,7 @@ primary_region = "nrt"
     port = 443
     handlers = ["tls", "http"]
 
-  [[services.tcp_checks]]
-    interval = "15s"
+  [[services.http_checks]]
+    interval = "10s"
     timeout = "2s"
+    path = "/"
