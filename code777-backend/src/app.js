@@ -11,6 +11,11 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+/* ===== 헬스체크 ===== */
+app.get("/", (req, res) => {
+    res.status(200).send("Backend is running 🚀");
+})
+
 /* 미들웨어 */
 app.use(cors({
     origin: [
@@ -40,8 +45,5 @@ app.use(session({
 
 registerRouters(app);
 
-/* ===== 헬스체크 ===== */
-app.get("/", (req, res) => {
-    res.send("Backend is running 🚀");
-})
+
 export { app };
