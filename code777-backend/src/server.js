@@ -33,6 +33,7 @@ async function startServer() {
     try {
         await client.connect();
         const db = client.db("game");
+        app.locals.db = db;
         console.log("✅ MongoDB connected");
 
         const rooms = await loadRoomsFromDb(db);
