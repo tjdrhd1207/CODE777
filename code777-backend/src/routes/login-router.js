@@ -9,8 +9,12 @@ router.post("/selectUser", async (req, res) => {
     const { id, pw } = req.body;
 
     try {
+        console.log("----db정보----");
+        console.log(db);
         const user = await db.collection("user").findOne({ id });
 
+        console.log("--유저--");
+        console.log(user);
         if (!user) {
             return res.send({ code: 0, message: "아이디 없음" });
         }
