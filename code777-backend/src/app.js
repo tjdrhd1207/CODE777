@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 app.use(cors({
     origin: [
       "http://localhost:3000",
-      "https://code777.vercel.app"
+      "https://code777-frontend.vercel.app/"
     ],
     credentials: true
 }));
