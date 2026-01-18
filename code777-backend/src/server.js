@@ -29,15 +29,10 @@ const io = new Server(server, {
 initSocket(io);
 
 async function startServer() {
-    server.listen(PORT, "0.0.0.0", () => {
-        console.log("🚀 Backend running on", PORT);
-    });
 
-    /* try {
+    try {
         await client.connect();
         const db = client.db("game");
-
-        app.locals.db = db;
         console.log("✅ MongoDB connected");
 
         const rooms = await loadRoomsFromDb(db);
@@ -45,7 +40,11 @@ async function startServer() {
 
     } catch (err) {
         console.error("❌ MongoDB connection failed", err);
-    } */
+    }
+    
+    server.listen(PORT, "0.0.0.0", () => {
+        console.log("🚀 Backend running on", PORT);
+    });
 }
 
 startServer();
