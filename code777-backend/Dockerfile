@@ -2,12 +2,13 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY code777-backend/package*.json ./
+# package.json 먼저 복사 (캐시 활용)
+COPY package*.json ./
 RUN npm install --production
 
-COPY code777-backend/ .
+# 나머지 소스 복사
+COPY . .
 
-ENV PORT=4000
 EXPOSE 4000
 
 CMD ["node", "src/server.js"]
