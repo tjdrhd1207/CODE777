@@ -17,12 +17,19 @@ app.get("/", (req, res) => {
 })
 
 /* 미들웨어 */
-app.use(cors({
+/* app.use(cors({
     origin: [
       "http://localhost:3000",
       "https://code777-frontend.vercel.app"
     ],
     credentials: true
+})); */
+app.options("*", cors({
+  origin: [
+    "http://localhost:3000",
+    "https://code777-frontend.vercel.app"
+  ],
+  credentials: true
 }));
 
 
@@ -38,7 +45,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     // ⭐ 이게 핵심
-    secure: false,      // localhost는 HTTPS 아님
+    secure: true,      // localhost는 HTTPS 아님
     sameSite: "none"    // 3000 → 4000 쿠키 허용
   }
 }));
