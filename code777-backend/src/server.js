@@ -1,3 +1,5 @@
+import "dotenv/config";
+import dotenv from "dotenv";
 import http from "http";
 import { Server } from "socket.io";
 import { initSocket } from "./socket/index.js";
@@ -6,8 +8,11 @@ import { MongoClient } from "mongodb";
 import { loadRoomsFromDb } from "./repository/roomRepository.js";
 import RoomManager from "./domain/room/RoomManager.js";
 
+dotenv.config({ path: ".env" });
+dotenv.config({ path: ".env.local", override: true });
+
 const PORT = process.env.PORT || 4000;
-const MONGO_URL = "mongodb+srv://jaemin:hansol@cluster0.3lo3bxi.mongodb.net/game?retryWrites=true&w=majority&appName=Cluster0";
+const MONGO_URL = process.env.MONGO_URL;
 
 const client = new MongoClient(MONGO_URL, {
     tls: true,
@@ -16,12 +21,11 @@ const client = new MongoClient(MONGO_URL, {
 })
 const server = http.createServer(app);
 
+const corsOrigins = process.env.CORS_ORIGINS?.split(",") || [];
+
 const io = new Server(server, {
     cors: {
-        origin: [
-            "http://localhost:3000",
-            "https://code777.vercel.app"
-        ],
+        origin : corsOrigins,
         credentials: true,
     }
 });
