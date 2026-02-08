@@ -17,13 +17,20 @@ app.get("/", (req, res) => {
 })
 
 /* 미들웨어 */
-app.use(cors({
+/* app.use(cors({
     origin: [
       "http://localhost:3000",
       "http://localhost:3030",
       "https://code777-frontend.vercel.app"
     ],
     credentials: true
+})); */
+app.options("*", cors({
+  origin: [
+    "http://localhost:3000",
+    "https://code777-frontend.vercel.app"
+  ],
+  credentials: true
 }));
 
 
