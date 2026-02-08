@@ -1,4 +1,6 @@
-import { createRoom } from "./roomListAPI.js";
+import RoomStore from "../store/RoomStore.js";
+import { generateUniqueId } from "../utils.js";
+import { createRoom, fetchRoomList } from "./roomListAPI.js";
 import { renderRoom } from "./roomListUI.js";
 
 export function bindRoomListEvents(currentUserId) {
@@ -13,7 +15,6 @@ export function bindRoomListEvents(currentUserId) {
     if (currentUserId.trim() != "") {
         userDiv.textContent += currentUserId;
         userDiv.textContent += "님 환영합니다.";
-        selectRoomList();
     } else {
 
     }
@@ -29,9 +30,8 @@ export function bindRoomListEvents(currentUserId) {
     // 방 입장
     roomList.addEventListener("dblclick", (e) => {
         let targetRoom = e.target.closest(".room");
-        if (!roomEl) return;
         let roomId = targetRoom.dataset.roomInfo;
-        let selectedRoom = RoomManager.getRoom(roomId);
+        let selectedRoom = RoomStore.getRoom(roomId);
         selectedRoom.join(currentUserId);
 
         localStorage.setItem('selectedRoom', JSON.stringify(selectedRoom));
@@ -55,7 +55,7 @@ export function bindRoomListEvents(currentUserId) {
 
         if (result.code === 1) {
             renderRoom(roomInfo);
-            RoomManager.createRoom(roomInfo);
+            RoomStore.createRoom(roomInfo);
             modal.style.display = "none";
         } else {
             alert("방 이름 중독");

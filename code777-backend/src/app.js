@@ -20,6 +20,7 @@ app.get("/", (req, res) => {
 app.use(cors({
     origin: [
       "http://localhost:3000",
+      "http://localhost:3030",
       "https://code777-frontend.vercel.app"
     ],
     credentials: true
@@ -39,7 +40,8 @@ app.use(session({
     httpOnly: true,
     // ⭐ 이게 핵심
     secure: false,      // localhost는 HTTPS 아님
-    sameSite: "none"    // 3000 → 4000 쿠키 허용
+    // sameSite: "none"    // 3000 → 4000 쿠키 허용 , 배포환경에서 사용
+    sameSite: "lax" // 로컬에서의 설정
   }
 }));
 

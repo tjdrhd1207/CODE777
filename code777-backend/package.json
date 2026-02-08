@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "NODE_ENV=local node server.js",
-    "start": "NODE_ENV=prod node server.js"
+    "dev": "cross-env NODE_ENV=local node src/server.js",
+    "start": "cross-env NODE_ENV=prod node src/server.js"
   },
   "author": "",
   "license": "ISC",
@@ -15,5 +15,8 @@
     "express-session": "^1.18.2",
     "mongodb": "^7.0.0",
     "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
   }
 }

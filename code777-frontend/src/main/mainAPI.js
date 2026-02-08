@@ -25,6 +25,7 @@ export function login(id, pw) {
     fetch(`${ENV.BACKEND_URL}/login/selectUser`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: "include", 
         body: JSON.stringify({ id, pw }),
     })
         .then(res => res.json())
@@ -39,6 +40,8 @@ export function login(id, pw) {
 
 export async function checkLogin() {
     try {
+        console.log("체크 로그인");
+        console.log(ENV.BACKEND_URL);
         const response = await fetch(`${ENV.BACKEND_URL}/check-login`, {
             credentials: "include",
         });

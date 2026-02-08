@@ -8,7 +8,10 @@ export async function checkLoginOrRedirect() {
         });
 
         let data = await response.json();
-
+        console.log("------------");
+        console.log(data.loggedIn);
+        console.log(data);
+        console.log("------------");
         if (data.loggedIn) {
             return data.user.id; //로그인된 사용자 id 반환
         } else {

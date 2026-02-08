@@ -1,6 +1,8 @@
 import { checkLoginOrRedirect } from '../core/auth/authGuard.js';
 import RoomStore from '../store/RoomStore.js';
+import { fetchRoomList } from './roomListAPI.js';
 import { bindRoomListEvents } from './roomListEvent.js';
+import { renderRoom } from './roomListUI.js';
 
 let currentUserId = null;
 
